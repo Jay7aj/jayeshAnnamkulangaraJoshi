@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geonames API</title>
+    <link rel = "stylesheet" href = "style.css" type="text/css">
+</head>
+<body>
+    <table id = "tablemain">
+        <thead>
+            <th>Name</th>
+            <th>API Description</th>
+        </thead>
+        <tr>
+            
+                <td>Country Info</td>
+                <td>
+                    <div>
+                        <p>Provides the Country information like Capital, Continent, Population:</p>
+                        <label for="country">Country: </label>
+                        <select name = "country" id ="country">
+                        </select>
+                        <br>
+                        <br>   
+                    </div>
+                </td>
+                <td><input type="button" value="Submit" id="countryInfoSubmit"></td>
+            
+        </tr>
+        
+        <tr>
+          
+                <td>Timezone</td>
+                <td>
+                    <div>
+                        <p>Returns the timezone ID, current time, country name by taking latitude and longitude as input:</p>
+                        <label for="lat">Latitude: </label>
+                        <input type="text" id="lat" name="lat"><br><br>
+                        <label for="long">Longitude: </label>
+                        <input type="text" id="long" name="long"><br><br>       
+                    </div>
+            
+                </td>
+                <td><input type="button" value="Submit" id="timezoneSubmit"></td>
+            
+        </tr>
+
+        <tr>
+            
+                <td>Wikipedia Search</td>
+                <td>
+                    <div>
+                        
+                        <p>Enter a place to search and the number of results needed.</p>
+                        <label for="search">Search for a place: </label>
+                        <input type="text" id="search" name="search"><br><br>
+                        <label for="resrow">Number of max results: </label>
+                        <input type="text" id="resrow" name="resrow"><br><br>
+                    
+                    </div>
+                </td>
+                <td><input type="button" value="Submit" id="wikiSearchSubmit"></td>
+            
+        </tr>
+        <tr>
+            <td colspan="3" id="result">Results</td>
+        </tr>
+    </table>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

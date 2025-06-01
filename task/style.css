@@ -1,0 +1,14 @@
+table {
+    height: 40%;
+    left: 10%;
+    margin: 20px auto;
+    overflow-y: scroll;
+    position: static;
+    width: 50%;
+
+  }
+
+  table, th, tr, td {
+    border: 2px solid black;
+    border-collapse: collapse;
+  }
