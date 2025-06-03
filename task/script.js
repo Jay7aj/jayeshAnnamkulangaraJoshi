@@ -1,38 +1,63 @@
 
 
-async function load(){
-    try{
-        await fetch("http://api.geonames.org/countryInfoJSON?lang=english&username=jayeshannam")
-        .then(res=> res.json())
-        .then(function(data){
-            let jsonData = data;
-            // console.log(jsonData);
-            let options = `<option value="">Select a Country</option>`;
-            let countryArray = [];
-            for(let i in jsonData.geonames){
-                cName = jsonData.geonames[i];
-                countryArray.push(cName);
-            }
-            countryArray.sort((a, b) => a.countryName.localeCompare(b.countryName));
+// async function load(){
+//     try{
+//         await fetch("http://api.geonames.org/countryInfoJSON?lang=english&username=jayeshannam")
+//         .then(res=> res.json())
+//         .then(function(data){
+//             let jsonData = data;
+//             // console.log(jsonData);
+//             let options = `<option value="">Select a Country</option>`;
+//             let countryArray = [];
+//             for(let i in jsonData.geonames){
+//                 cName = jsonData.geonames[i];
+//                 countryArray.push(cName);
+//             }
+//             countryArray.sort((a, b) => a.countryName.localeCompare(b.countryName));
         
-            for(let j=0; j<countryArray.length; j++){
-                options += `<option value="${countryArray[j].fipsCode}">${countryArray[j].countryName}</option>`;
-            }
-            document.getElementById("country").innerHTML= options;
-        })
+//             for(let j=0; j<countryArray.length; j++){
+//                 options += `<option value="${countryArray[j].fipsCode}">${countryArray[j].countryName}</option>`;
+//             }
+//             document.getElementById("country").innerHTML= options;
+//         })
         
 
-    }catch(err){
-        console.error(err);
-    }
-}
-load();
+//     }catch(err){
+//         console.error(err);
+//     }
+// }
+// load();
 
-let resultCol = document.getElementById("result");
+// let resultCol = document.getElementById("result");
 
 
 
 $(document).ready(()=>{
+    
+    $.ajax({
+        url: 'load.php',
+        type: 'GET',
+        dataType: 'json',
+        success: function(data) {
+
+            let options = '<option value="">Select a Country</option>';
+            let countryArray = [];
+
+            for (let i in data.geonames) {
+                let cName = data.geonames[i];
+                countryArray.push(cName);
+            }
+            countryArray.sort((a, b) => a.countryName.localeCompare(b.countryName));
+
+            for (let j = 0; j < countryArray.length; j++) {
+                options += `<option value="${countryArray[j].fipsCode}">${countryArray[j].countryName}</option>`;
+            }
+            $('#country').html(options);
+        },
+        error: function(xhr, status, error) {
+            console.error('AJAX Error:', status, error);
+        }
+    });
 
     //event handler function to call countryInfo.php
     $('#countryInfoSubmit').on('click',() => {
@@ -44,7 +69,7 @@ $(document).ready(()=>{
                 country: $('#country').val() 
             },
             success: function(result){
-                // console.log(result);
+                console.log(result);
                 $('#result').html("<h3>Results:</h3>");
                 if(result.status.code != 200){
                     $('#result').append(`<p>Status Code: ${result.status.code}</p>`);

@@ -1,0 +1,52 @@
+Jun  3 11:37:34 10.71.57.0 a2497083 Connection from 10.71.57.0 port 37906 on 82.165.90.140 port 22 rdomain ""
+Jun  3 11:37:34 10.71.57.0 a2497083 Accepted password for a2497083 from 10.71.57.0 port 37906 ssh2
+Jun  3 11:37:35 10.71.57.0 a2497083 Starting session: subsystem 'sftp' for a2497083 from 10.71.57.0 port 37906 id 0
+Jun  3 11:37:35 10.71.57.0 a2497083 session opened for local user a2497083 from [10.71.57.0]
+Jun  3 11:42:38 10.71.57.0 a2497083 session closed for local user a2497083 from [10.71.57.0]
+Jun  3 11:42:38 10.71.57.0 a2497083 Received disconnect from 10.71.57.0 port 37906:11: Connection terminated by the client.
+Jun  3 11:54:36 10.71.56.0 a1352035 Connection from 10.71.56.0 port 21820 on 82.165.90.140 port 22 rdomain ""
+Jun  3 11:54:36 10.71.56.0 a1352035 Accepted password for a1352035 from 10.71.56.0 port 21820 ssh2
+Jun  3 11:54:37 10.71.56.0 a1352035 Starting session: subsystem 'sftp' for a1352035 from 10.71.56.0 port 21820 id 0
+Jun  3 11:54:37 10.71.56.0 a1352035 session opened for local user a1352035 from [10.71.56.0]
+Jun  3 12:01:58 10.71.56.0 a1352035 Connection from 10.71.56.0 port 25316 on 82.165.90.140 port 22 rdomain ""
+Jun  3 12:01:58 10.71.56.0 a1352035 Accepted password for a1352035 from 10.71.56.0 port 25316 ssh2
+Jun  3 12:01:58 10.71.56.0 a1352035 Connection from 10.71.56.0 port 59146 on 82.165.90.140 port 22 rdomain ""
+Jun  3 12:01:58 10.71.56.0 a1352035 Accepted password for a1352035 from 10.71.56.0 port 59146 ssh2
+Jun  3 12:01:58 10.71.56.0 a1352035 Starting session: subsystem 'sftp' for a1352035 from 10.71.56.0 port 59146 id 0
+Jun  3 12:01:58 10.71.56.0 a1352035 Starting session: subsystem 'sftp' for a1352035 from 10.71.56.0 port 25316 id 0
+Jun  3 12:01:58 10.71.56.0 a1352035 session opened for local user a1352035 from [10.71.56.0]
+Jun  3 12:01:58 10.71.56.0 a1352035 session opened for local user a1352035 from [10.71.56.0]
+Jun  3 12:01:59 10.71.56.0 a1352035 sent status No such file
+Jun  3 12:01:59 10.71.56.0 a1352035 mkdir name "/task" mode 0777
+Jun  3 12:01:59 10.71.56.0 a1352035 [10.71.56.0|mkdir|0|0|511|0|0|2f7461736b|]
+Jun  3 12:01:59 10.71.56.0 a1352035 open "/task/countryInfo.php" flags WRITE,CREATE,TRUNCATE mode 0666
+Jun  3 12:01:59 10.71.56.0 a1352035 open "/task/index.html" flags WRITE,CREATE,TRUNCATE mode 0666
+Jun  3 12:01:59 10.71.56.0 a1352035 close "/task/countryInfo.php" bytes read 0 written 1046
+Jun  3 12:01:59 10.71.56.0 a1352035 [10.71.56.0|put|0|1046|0|0|0|2f7461736b2f636f756e747279496e666f2e706870|]
+Jun  3 12:01:59 10.71.56.0 a1352035 close "/task/index.html" bytes read 0 written 2666
+Jun  3 12:01:59 10.71.56.0 a1352035 [10.71.56.0|put|0|2666|0|0|0|2f7461736b2f696e6465782e68746d6c|]
+Jun  3 12:01:59 10.71.56.0 a1352035 open "/task/script.js" flags WRITE,CREATE,TRUNCATE mode 0666
+Jun  3 12:01:59 10.71.56.0 a1352035 open "/task/style.css" flags WRITE,CREATE,TRUNCATE mode 0666
+Jun  3 12:01:59 10.71.56.0 a1352035 close "/task/script.js" bytes read 0 written 5472
+Jun  3 12:01:59 10.71.56.0 a1352035 [10.71.56.0|put|0|5472|0|0|0|2f7461736b2f7363726970742e6a73|]
+Jun  3 12:01:59 10.71.56.0 a1352035 close "/task/style.css" bytes read 0 written 229
+Jun  3 12:01:59 10.71.56.0 a1352035 [10.71.56.0|put|0|229|0|0|0|2f7461736b2f7374796c652e637373|]
+Jun  3 12:01:59 10.71.56.0 a1352035 open "/task/timezone.php" flags WRITE,CREATE,TRUNCATE mode 0666
+Jun  3 12:01:59 10.71.56.0 a1352035 open "/task/wikipediaSearch.php" flags WRITE,CREATE,TRUNCATE mode 0666
+Jun  3 12:02:00 10.71.56.0 a1352035 close "/task/timezone.php" bytes read 0 written 996
+Jun  3 12:02:00 10.71.56.0 a1352035 close "/task/wikipediaSearch.php" bytes read 0 written 1081
+Jun  3 12:02:00 10.71.56.0 a1352035 [10.71.56.0|put|1|996|0|0|0|2f7461736b2f74696d657a6f6e652e706870|]
+Jun  3 12:02:00 10.71.56.0 a1352035 [10.71.56.0|put|1|1081|0|0|0|2f7461736b2f77696b6970656469615365617263682e706870|]
+Jun  3 12:03:00 10.71.56.0 a1352035 session closed for local user a1352035 from [10.71.56.0]
+Jun  3 12:03:00 10.71.56.0 a1352035 Connection closed by 10.71.56.0 port 25316
+Jun  3 12:03:00 10.71.56.0 a1352035 Connection closed by 10.71.56.0 port 59146
+Jun  3 12:03:00 10.71.56.0 a1352035 session closed for local user a1352035 from [10.71.56.0]
+Jun  3 12:03:33 10.71.57.0 a2483522 Connection from 10.71.57.0 port 11072 on 82.165.90.140 port 22 rdomain ""
+Jun  3 12:03:34 10.71.57.0 a2483522 Accepted password for a2483522 from 10.71.57.0 port 11072 ssh2
+Jun  3 12:03:34 10.71.57.0 a2483522 Starting session: subsystem 'sftp' for a2483522 from 10.71.57.0 port 11072 id 0
+Jun  3 12:03:34 10.71.57.0 a2483522 session opened for local user a2483522 from [10.71.57.0]
+Jun  3 12:05:39 10.71.56.0 a1352035 Connection from 10.71.56.0 port 60814 on 82.165.90.140 port 22 rdomain ""
+Jun  3 12:05:40 10.71.56.0 a1352035 Accepted password for a1352035 from 10.71.56.0 port 60814 ssh2
+Jun  3 12:05:40 10.71.56.0 a1352035 Starting session: subsystem 'sftp' for a1352035 from 10.71.56.0 port 60814 id 0
+Jun  3 12:05:40 10.71.56.0 a1352035 session opened for local user a1352035 from [10.71.56.0]
+Jun  3 12:05:40 10.71.56.0 a1352035 open "/logs/sftp.log" flags READ mode 0666
