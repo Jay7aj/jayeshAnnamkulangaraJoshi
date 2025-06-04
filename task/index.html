@@ -65,10 +65,29 @@
             
         </tr>
         <tr>
+            
+                <td>Earthquakes</td>
+                <td>
+                    <div>
+                        <p>Returns a list of earthquakes, ordered by magnitude</p>
+                        <label for="north">Enter North Coordinate: </label>
+                        <input type="text" id="north" name="north"><br><br>
+                        <label for="south">Enter South Coordinate: </label>
+                        <input type="text" id="south" name="south"><br><br>
+                        <label for="east">Enter East Coordinate: </label>
+                        <input type="text" id="east" name="east"><br><br>
+                        <label for="west">Enter West Coordinate: </label>
+                        <input type="text" id="west" name="west"><br><br>                
+                        </div>
+                    </td>
+                    <td><input type="button" value="Submit" id="earthquakeSubmit"></td>
+            
+        </tr>
+        <tr>
             <td colspan="3" id="result">Results</td>
         </tr>
     </table>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="jquery-3.7.1.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
