@@ -1,0 +1,31 @@
+#map {
+    position: absolute;
+    top: 50px;
+    bottom: 0;
+    right: 0;
+    left: 0;
+}
+
+#overlay {
+    visibility: hidden;
+    height: auto;
+    min-height: 10%;
+    width: 12%;
+    position: absolute;
+    z-index: 10000;
+    border: 1px solid rgb(26, 24, 24);
+    top: 70px;
+    left: 85%;
+    background-color: lightgrey;
+    opacity: 0.75;
+    padding: 10px;
+    font-family: Arial, sans-serif;
+    font-size: small;
+    overflow-y: auto;
+}
+
+#navig {
+    height: 30px;
+    background-color: #eee;
+    padding: 5px;
+}
