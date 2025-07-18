@@ -37,29 +37,34 @@ function createMap(lat, lng, zoom=6){
         type: "GET",
         dataType: "json",
         success: async function(data){
+            console.log(data.data);
             let matched = false;
             const point = [lng, lat];
-
             for (let feature of data.features){
                 let geometry = feature.geometry;
 
                 if(geometry.type == "Polygon"){
                     matched = turf.booleanPointInPolygon(point, turf.polygon(geometry.coordinates));
+                
                 } else if(geometry.type == "MultiPolygon"){
                     for(coords of geometry.coordinates){
                         if(turf.booleanPointInPolygon(point, turf.polygon(coords))){
                             matched = true;
-                            break;
+                            
                         }
                     }
                 }
+                
                 if(matched){
-                    
+                    console.log("result from feature");
+                    console.log(feature);
                     //adding and higlighting the current country border
                     let layer = L.geoJson(feature, {style: borderHighlightStyle}).addTo(map);
                     map.fitBounds(layer.getBounds(), {padding: [5,5]});                      
-                    let countryCode= feature.properties.iso_a2;
-                    
+                    let countryCode= feature.properties.iso_a3;
+                    console.log(countryCode);
+
+
                     //request to get country details
                     $.ajax({
                         url: "countryDetails.php",
@@ -69,6 +74,9 @@ function createMap(lat, lng, zoom=6){
                             code: countryCode
                         },
                         success: function(result){
+                            console.log("inside coutry details req in main func");
+                            
+                            console.log(result);
                             document.getElementById("overlay").style.visibility = "visible"; 
                             let countryName= result.data.name.common;
                             let capital= result.data.capital[0];
@@ -122,8 +130,9 @@ function createMap(lat, lng, zoom=6){
                     }
                 }                                            
             },
-            error: function(xhr, status, error){
-                console.error('AJAX Error:', status, error);
+            error: function(xyz, textStatus, error){
+                console.log("AJAX error:", textStatus, error);
+                console.log("Response:", xyz.responseText);
             }
     });    
 
@@ -155,7 +164,7 @@ $(document).ready(()=>{
         type: 'GET',
         dataType: 'json',
         success: function(result) {
-            
+
             let options = '<option value="">Select a Country</option>';
             let countryArray = [];
 
@@ -163,10 +172,14 @@ $(document).ready(()=>{
                 let cName = result.data[i];
                 countryArray.push(cName);
             }
-            countryArray.sort((a, b) => a.countryName.localeCompare(b.countryName));
-
+            countryArray.sort((a, b) => a.name.common.localeCompare(b.name.common));
+            
             for (let j = 0; j < countryArray.length; j++) {
-                options += `<option value="${countryArray[j].fipsCode}">${countryArray[j].countryName}</option>`;
+                if(countryArray[j].cioc!=""){
+                    options += `<option value="${countryArray[j].cioc}">${countryArray[j].name.common}</option>`;
+                }else{
+                    continue;
+                }
             }
             $('#country').html(options);
         },
@@ -179,21 +192,25 @@ $(document).ready(()=>{
 //Event handler to update country.
 $('#countrySubmit').on('click',() => {
     let countryCode = $("#country").val();
-
+    console.log(countryCode);
     if(countryCode ==""){
         alert("Please select a country");
     }else{
         //call navigator.geolocation with selected countryCode
         $.ajax({
-            url: "countryDetails.php",
+            url: "countryCoords.php",
             type:'GET',
             dataType:'json',
             data:{
-                code: countryCode
+                code: countryCode,
             },
             success: function(result){
-                let lat = result.data.latlng[0];
-                let lng = result.data.latlng[1];
+                console.log("results from country coords, when submited");
+                console.log(result);
+                let lat = result.data.capitalInfo.latlng[0];
+                let lng = result.data.capitalInfo.latlng[1];
+                console.log(lat);
+                console.log(lng);
                 //calling create map with selected country coordinates
                 createMap(lat, lng);
             },

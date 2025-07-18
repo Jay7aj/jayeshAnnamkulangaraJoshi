@@ -1,7 +1,7 @@
 <?php
 $executionStartTime= microtime(true);
 
-$url = 'http://api.geonames.org/countryInfoJSON?lang=english&username=jayeshannam';
+$url = 'https://restcountries.com/v3.1/all?fields=name,cioc';
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, $url);
 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -12,7 +12,7 @@ $result = curl_exec($ch);
 curl_close($ch);
 
 $decode = json_decode($result,true);
-if (!isset($decode["geonames"]) || empty($decode["geonames"])) {
+if (!isset($decode) || empty($decode)) {
     $output["status"]["code"] = "400";
     $output["status"]["name"] = "error";
     $output["status"]["description"] = "No Country data found!";
@@ -22,7 +22,7 @@ if (!isset($decode["geonames"]) || empty($decode["geonames"])) {
     $output["status"]["name"] = "ok";
     $output["status"]["description"] = "success";
     $output["status"]["returnedIn"]= intval((microtime(true) - $executionStartTime) *1000). "ms";
-    $output["data"] = $decode["geonames"];
+    $output["data"] = $decode;
 }
 
 header("Content-Type: application/json; charset=UTF-8");
