@@ -43,11 +43,9 @@
     <!-- Navbar -->
     <nav class="navbar navbar-light bg-light">
         <div class="container-fluid">
-            <select name="country" id="country" class="form-select w-auto me-3 mx-auto">
+            <select name="country" id="country" class="form-select w-auto mx-auto">
             <option>Select Country</option>
-            </select>
-        <button id="getLocation" class="btn btn-primary mx-auto">Get Current Location</button>
-               
+            </select>               
         </div>
     </nav>
     
@@ -343,7 +341,45 @@
                             </td>
                         </tr> 
 
-                        
+                        <tr>
+                            <td>
+                                <strong>Currency Converter:</strong>
+                            </td>
+                            
+                        </tr> 
+
+                        <tr >
+                            <td colspan="3" class="text-center">
+                                <form method="POST" class="col g-3">
+                                    <div class="col-sm-12 mb-3">
+                                        <label for="amount" class="form-label">Amount</label>
+                                        <input id="amount" type="number" name="amount" class="form-control" placeholder="Enter amount">
+                                    </div>
+
+                                    <div class="col-sm-12 mb-3">
+                                        <label for="convertTo" class="form-label">Convert To</label>
+                                        <select id="convertTo" name="convertTo" class="form-select" aria-label="Currency Code">
+                                           <!--loads options from js  -->
+                                        </select>
+                                    </div>
+
+                                    <div class="col-sm-12 d-flex align-items-start">
+                                        <button id="convertButtn" type="button" class="btn btn-primary w-100">Convert</button>
+                                    </div>
+                                </form>
+                            </td>
+                        </tr>
+
+                        <tr>                           
+                            <td>
+                                <strong>Result</strong>
+                            </td>
+                            
+                            <td id="result" class="text-end">
+                            
+                            </td>
+                        </tr> 
+
                     </table>
                 </div>
                 <div class="modal-footer">
@@ -463,32 +499,37 @@
     </div>
 
     <!-- Button to view time button -->
-    <div id="linkButtn" class="position-absolute">
-        <button class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#linkModal">
-            <i class="bi bi-link fs-3"></i>
+    <div id="wikiButtn" class="position-absolute">
+        <button class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#wikiModal">
+            <i class="bi bi-icon fs-3">W</i>
         </button>
     </div>
 
     <!--Time Modal Overlay -->
-     <div id="linkModal" class="modal" data-bs-backdrop="false" tabindex="-1">
+    <div id="wikiModal" class="modal" data-bs-backdrop="false" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content shadow">
                 <div class="modal-header bg-success bg-gradient text-white">
-                    <h5 class="modal-title">Links to external sites</h5>
+                    <h5 class="modal-title">Wikipedia Info</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <table class="table table-striped">
                         <tr>
-                            <td class="text-center">
-                                <i class="fa-solid fa-location-dot fa-xl text-success"></i>
-                            </td>
-                            
-                            <td id="gMap">
+                           <td id="heading">
                                 
                             </td>
-                            
+                        </tr>  
+                        <tr>
+                           <td id="description">
+                                
+                            </td>
                         </tr>   
+                        <tr>
+                           <td id="wikiLink">
+                                
+                            </td>
+                        </tr>  
 
                         
                     </table>

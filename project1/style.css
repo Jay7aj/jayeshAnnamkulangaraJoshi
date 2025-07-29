@@ -6,24 +6,6 @@
     left: 0;
 }
 
-#overlay {
-    display: none;
-    height: auto;
-    min-height: 10%;
-    width: 12%;
-    position: absolute;
-    z-index: 1000;
-    border: 1px solid rgb(26, 24, 24);
-    top: 70px;
-    left: 85%;
-    background-color: lightgrey;
-    opacity: 0.75;
-    padding: 10px;
-    font-family: Arial, sans-serif;
-    font-size: small;
-    overflow-y: auto;
-}
-
 #infoButtn{
     z-index: 1000;
     top: 110px;
@@ -52,7 +34,7 @@
     opacity: .7;
 }
 
-#linkButtn{
+#wikiButtn{
     z-index: 1000;
     top: 350px;
     right: 10px;
