@@ -7,8 +7,8 @@ let currCurrencyCode= null;
 let countryCode2= null;
 let countryCode3=null;
 let markerCapital = null;
-let markerAirport=null;
-let markerRailway =null;
+let airportCluster = L.markerClusterGroup();
+let railwayCluster = L.markerClusterGroup();
 
 // Loader functions
 function showLoader() {
@@ -90,7 +90,7 @@ function getWeather(lat, lng){
 //function to return the airports data
 function getAirports(countryCode){
 
-    markerAirport= removeOverlayIfExists(markerAirport);
+    airportCluster.clearLayers();
 
     $.ajax({
         url:"getAirports.php",
@@ -100,13 +100,20 @@ function getAirports(countryCode){
         success: function(result){
             
             let airports = result.data.data;
-            var markerAirportArray= [];
+            const airportIcon = L.ExtraMarkers.icon({
+                    icon: 'fa-plane',
+                    number: '1',
+                    markerColor: 'blue',
+                    shape: 'circle',
+                    prefix: 'fa'
+                });
             for (let i = 0; i < airports.length; i++) {
                 let airport = airports[i];
-                markerAirportArray.push(L.marker([airport.latitude, airport.longitude]).bindPopup(`Airport Name: <strong>${airport.airport_name}</strong>`));
+                let marker=L.marker([airport.latitude, airport.longitude],{icon: airportIcon}).bindPopup(`Airport Name: <strong>${airport.airport_name}</strong>`);
+                airportCluster.addLayer(marker);
             }
-            markerAirport=L.layerGroup(markerAirportArray);
-            layerControl.addOverlay(markerAirport, "Airports")
+            
+            
         },error: function(err){
             console.error("Details AJAX error", err);
         }
@@ -116,7 +123,7 @@ function getAirports(countryCode){
 //function to return railway station data
 function getRailway(countryCode){
 
-    markerRailway = removeOverlayIfExists(markerRailway);
+    railwayCluster.clearLayers();
 
     $.ajax({
         url:"getRailway.php",
@@ -126,13 +133,19 @@ function getRailway(countryCode){
         success: function(result){
 
             let railways = result.data.geonames;
-            var markerRailwayArray= [];
+            const railwayIcon = L.ExtraMarkers.icon({
+                    icon: 'fa-train',
+                    markerColor: 'blue',
+                    shape: 'circle',
+                    prefix: 'fa'
+                });
             for (let i = 0; i < railways.length; i++) {
                 let railway = railways[i];
-                markerRailwayArray.push(L.marker([railway.lat, railway.lng]).bindPopup(`Station Name: <strong>${railway.name}</strong>`));
+                let marker = L.marker([railway.lat, railway.lng], {icon: railwayIcon}).bindPopup(`Station Name: <strong>${railway.name}</strong>`);
+                railwayCluster.addLayer(marker);
             }
-            markerRailway=L.layerGroup(markerRailwayArray);
-            layerControl.addOverlay(markerRailway, "Railway Station")
+            
+           
         },error: function(err){
             console.error("Details AJAX error", err);
         }
@@ -381,6 +394,8 @@ $(document).ready(() => {
     });
 
     layerControl = L.control.layers(baseLayers).addTo(map);
+    layerControl.addOverlay(airportCluster, "Airports");
+    layerControl.addOverlay(railwayCluster, "Railway Stations");
 
     if (!navigator.geolocation) {
         alert("Geolocation not supported. Please select a country.");
