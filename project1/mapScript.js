@@ -431,10 +431,10 @@ function getCountryDetails(countryCode) {
             layerControl.addOverlay(markerCapital,"Capital");
             map.addLayer(markerCapital);
             getWeather(latlng[0],latlng[1]);
-            // getTimeInfo(latlng[0],latlng[1]);
-            // getCurrencyDropDown();
-            // getAirports(countryCode);
-            // getRailway(countryCode);
+            getTimeInfo(latlng[0],latlng[1]);
+            getCurrencyDropDown();
+            getAirports(countryCode);
+            getRailway(countryCode);
             getNews(data.name.common);
             getWikipedia(data.name.common);
             
