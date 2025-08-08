@@ -2,7 +2,7 @@
 <?php
 $executionStartTime= microtime(true);
 
-$url='https://api.exchangerate.host/convert?access_key=9a73b529d53d9efa0b7a0eb8ce5cfa15&from='. urlencode($_POST["currency"]).'&to='. urlencode($_POST["convertTo"]).'&amount='. urlencode($_POST["amount"]);
+$url = 'https://api.openweathermap.org/data/2.5/weather?lat='.urlencode($_GET["lat"]).'&lon='.urlencode($_GET["lng"]).'&appid=d0ddd37def0f0bc97df52a63b90ecd84&units=metric';
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, $url);
 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -10,14 +10,29 @@ curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
 $result = curl_exec($ch);
 
+$cURLERROR = curl_errno($ch);
+
 curl_close($ch);
+
+if ($cURLERROR) {
+
+$output['status']['code'] = $cURLERROR;
+$output['status']['name'] = "Failure - cURL";
+$output['status']['description'] = curl_strerror($cURLERROR);
+$output['status']['seconds'] = number_format((microtime(true) - $executionStartTime), 3);
+$output['data'] = null;
+
+echo json_encode($output);
+
+exit;
+}
 
 $decode = json_decode($result,true);
 
 if (!isset($decode) || empty($decode)) {
     $output["status"]["code"] = "400";
     $output["status"]["name"] = "error";
-    $output["status"]["description"] = "No Country data found!";
+    $output["status"]["description"] = "No Weather data found!";
     $output["status"]["url"] = $url;
     $output["data"] = null;
 } else {

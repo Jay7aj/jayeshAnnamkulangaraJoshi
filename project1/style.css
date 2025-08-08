@@ -1,42 +1,29 @@
 #map {
     position: absolute;
-    top: 50px;
+    top: 0px;
     bottom: 0;
     right: 0;
     left: 0;
+    height: 100vh;
 }
 
-#infoButtn{
+#selectContainer{
     z-index: 1000;
-    top: 110px;
-    right: 10px;
-    opacity: .7;
+    position: absolute;
+    padding: 11px 0;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
-#weatherButtn{
-    z-index: 1000;
-    top: 170px;
-    right: 10px;
-    opacity: .7;
+#loader{
+    position: fixed;
+    background: rgba(255, 255, 255, .95); /* Slight transparent background */
+    z-index: 9999;
+    display: none;
+    padding:100%;
+    
 }
 
-#currencyButtn{
-    z-index: 1000;
-    top: 230px;
-    right: 10px;
-    opacity: .7;
-}
-
-#timeButtn{
-    z-index: 1000;
-    top: 290px;
-    right: 10px;
-    opacity: .7;
-}
-
-#wikiButtn{
-    z-index: 1000;
-    top: 350px;
-    right: 10px;
-    opacity: .7;
+#weatherCard{
+    background-color: rgb(75, 123, 220);
 }

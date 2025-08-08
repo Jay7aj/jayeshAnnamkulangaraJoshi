@@ -14,10 +14,10 @@ curl_close($ch);
 
 $decode = json_decode($result,true);
 
-if (!isset($decode) || empty($decode)) {
+if (!isset($decode["currencies"]) || empty($decode["currencies"])) {
     $output["status"]["code"] = "400";
     $output["status"]["name"] = "error";
-    $output["status"]["description"] = "No Country data found!";
+    $output["status"]["description"] = "No Currency data found!";
     $output["status"]["url"] = $url;
     $output["data"] = null;
 } else {

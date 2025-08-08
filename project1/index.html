@@ -4,70 +4,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gazetteer</title>
-    <script src="jquery-3.7.1.min.js"></script>
+    
+
+    <!-- Favicon -->
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    
+    <!-- Bootstrap 5.3.7 css -->
+    <link rel="stylesheet" href="library/bootstrap/css/bootstrap.min.css">
 
     <!-- leaflet CSS file -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-    crossorigin=""/>
+    <link rel="stylesheet" href="library/leaflet/css/leaflet.css">
 
-    <!-- leaflet javascript file -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-    crossorigin=""></script>
-    <link rel="stylesheet" href="style.css">
+    <!-- Leaflet EasyButton CSS -->
+    <link rel="stylesheet" href="library/leaflet-easybutton/css/easy-button.css">
 
-    <!-- Including Turf.js for complex polygons -->
-    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
+    <!-- Leaflet ExtraMarkers -->
+    <link rel="stylesheet" href="library/leaflet-extra-markers/css/leaflet.extra-markers.min.css" />
+    
 
-    <!-- Bootstrap css file -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"/>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
-
-    <!-- EasyButton CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2.4.0/src/easy-button.css">
-
+    <!-- Leaflet MarkerCluster -->
+    <link rel="stylesheet" href="library/leaflet-marker-cluster/css/MarkerCluster.css" />
+    <link rel="stylesheet" href="library/leaflet-marker-cluster/css/MarkerCluster.Default.css" />
+    
     <!-- Font awesome CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-    <!-- ExtraMarkers -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-extra-markers/dist/css/leaflet.extra-markers.min.css" />
-    <script src="https://unpkg.com/leaflet-extra-markers/dist/js/leaflet.extra-markers.min.js"></script>
-
-    <!-- MarkerCluster -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
-    <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
-
-    <!-- Font Awesome (for icons) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="library/font-awesome/css/all.min.css">
+    
+    <!-- stylesheet -->
+    <link rel="stylesheet" href="style.css">
 
 
 
 </head>
 <body>
+
     <!-- Loader -->
-     <div id="loader" class="position-fixed top-50 start-50 translate-middle text-primary" style="z-index: 1050; display: none;">
+     <div id="loader" class="position-fixed top-50 start-50 translate-middle text-primary">
         <div class="spinner-border" role="status">
             <span class="visually-hidden">Loading...</span>
         </div>
     </div>
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-light bg-light">
-        <div class="container-fluid">
-            <select name="country" id="country" class="form-select w-auto mx-auto">
+
+    <!-- Country Select Bar -->
+    <span id="selectContainer">
+        <select name="countrySelect" id="countrySelect" class="form-select form-select-sm w-auto shadow-sm">
             <option>Select Country</option>
-            </select>               
-        </div>
-    </nav>
-    
-    <!-- Button to view info button -->
-    <div id="infoButtn" class="position-absolute">
-        <button class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#infoModal">
-            <i class="bi bi-info-circle fs-3"></i>
-        </button>
-    </div>
+        </select>
+    </span>
+
+    <!-- Map element div -->
+    <div id="map"></div>
+
 
     <!--Info Modal Overlay -->
      <div id="infoModal" class="modal" data-bs-backdrop="false" tabindex="-1">
@@ -186,148 +173,34 @@
         </div>
     </div>
 
-    <!-- Button to view weather button -->
-    <div id="weatherButtn" class="position-absolute">
-        <button class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#weatherModal">
-            <i class="bi bi-cloud-rain fs-3"></i>
-        </button>
-    </div>
-
     <!--Weather Modal Overlay -->
      <div id="weatherModal" class="modal" data-bs-backdrop="false" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content shadow">
                 <div class="modal-header bg-success bg-gradient text-white">
-                    <h5 class="modal-title">Weather Info near Capital</h5>
+                    <h5 id ="weatherModalTitle" class="modal-title"></h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <table class="table table-striped">
-                        <tr>
-                            <td class="text-center">
-                                <i class="fa-solid fa-star fa-xl text-success"></i>
-                            </td>
-                            
-                            <td>
-                                <strong>Capital</strong>
-                            </td>
-                            
-                            <td id="capital2" class="text-end">
-                                value
-                            </td>
-                        </tr> 
 
-                        <tr>
-                            <td class="text-center">
-                                <i class="fa-solid fa-clock fa-xl text-success"></i>
-                            </td>
-                            
-                            <td>
-                                <strong>Date/Time of observation</strong>
-                            </td>
-                            
-                            <td id="wDateTime" class="text-end">
-                                <strong>Value</strong>
-                            </td>
-                        </tr>     
-
-                        <tr>
-                            <td class="text-center">
-                                <i class="fa-solid fa-building-columns fa-xl text-success"></i>
-                            </td>
-                            
-                            <td>
-                                <strong>Station Name</strong>
-                            </td>
-                            
-                            <td id="station" class="text-end">
-                                <strong>Value</strong>
-                            </td>
-                        </tr>     
-                        <tr>
-                            <td class="text-center">
-                                <i class="fa-solid fa-temperature-full fa-xl text-success"></i>
-                            </td>
-                            
-                            <td>
-                                <strong>Temperature</strong>
-                            </td>
-                            
-                            <td id="temp" class="text-end">
-                                <strong>Value</strong>
-                            </td>
-                        </tr>     
-
-                        <tr>
-                            <td class="text-center">
-                                <i class="fa-solid fa-cloud fa-xl text-success"></i>
-                            </td>
-                            
-                            <td>
-                                <strong>Clouds</strong>
-                            </td>
-                            
-                            <td id="clouds" class="text-end">
-                                <strong>Value</strong>
-                            </td>
-                        </tr>     
-
-                        <tr>
-                            <td class="text-center">
-                                <i class="fa-solid fa-water fa-xl text-success"></i>
-                            </td>
-                            
-                            <td>
-                                <strong>Humidity</strong>
-                            </td>
-                            
-                            <td id="humidity" class="text-end">
-                                <strong>Value</strong>
-                            </td>
-                        </tr>     
-
-                        <tr>
-                            <td class="text-center">
-                                <i class="fa-solid fa-droplet fa-xl text-success"></i>
-                            </td>
-                            
-                            <td>
-                                <strong>Dew Point</strong>
-                            </td>
-                            
-                            <td id="dewPoint" class="text-end">
-                                <strong>Value</strong>
-                            </td>
-                        </tr>     
-
-                        <tr>
-                            <td class="text-center">
-                                <i class="fa-solid fa-wind fa-xl text-success"></i>
-                            </td>
-                            
-                            <td>
-                                <strong>Wind Speed</strong>
-                            </td>
-                            
-                            <td id="windSpeed" class="text-end">
-                                <strong>Value</strong>
-                            </td>
-                        </tr>    
-                        
-                    </table>
+                    <div id="weatherCard" class="card shadow-sm ">
+                        <div class="card-body text-center">
+                            <h5 id="weatherDate" class="card-title">Weather Date</h5>
+                            <img id="weatherImage" src="https://openweathermap.org/img/wn/10d@2x.png" alt="Weather Icon" style="width: 140px;">
+                            <p id="clouds" class="card-text mb-1">clouds</p>
+                            <p id="temperature" class="card-text mb-0"><strong>Temperature:</strong>°C</p>
+                            <p id="feelsLike" class="card-text mb-0"><strong>Feels like:</strong>°C</p>
+                            <p id="windSpeed" class="card-text mb-0"><strong>Wind speed:</strong></p>
+                            <p id="humidity" class="card-text"><strong>Humidity:</strong>%</p>
+                        </div>
+                    </div>
+                    
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-success btn-sm" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- Button to view currency button -->
-    <div id="currencyButtn" class="position-absolute">
-        <button class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#currencyModal">
-            <i class="bi bi-cash-coin fs-3"></i>
-        </button>
     </div>
 
     <!--Currency Modal Overlay -->
@@ -361,37 +234,34 @@
                             
                         </tr> 
 
-                        <tr >
-                            <td colspan="3" class="text-center">
-                                <form method="POST" class="col g-3">
-                                    <div class="col-sm-12 mb-3">
-                                        <label for="amount" class="form-label">Amount</label>
-                                        <input id="amount" type="number" name="amount" class="form-control" placeholder="Enter amount">
-                                    </div>
-
-                                    <div class="col-sm-12 mb-3">
-                                        <label for="convertTo" class="form-label">Convert To</label>
-                                        <select id="convertTo" name="convertTo" class="form-select" aria-label="Currency Code">
-                                           <!--loads options from js  -->
-                                        </select>
-                                    </div>
-
-                                    <div class="col-sm-12 d-flex align-items-start">
-                                        <button id="convertButtn" type="button" class="btn btn-primary w-100">Convert</button>
-                                    </div>
-                                </form>
+                        <tr>
+                            <td colspan="3">
+                                <div class="form-floating mb-3">
+                                    <input id="fromAmount" type="number" class="form-control" value="1" min="1" step="1">
+                                    <label >From USD</label>
+                                </div>
                             </td>
                         </tr>
 
-                        <tr>                           
-                            <td>
-                                <strong>Result</strong>
+                        <tr>
+                            <td colspan="3">
+                                 <div class="form-floating mb-3">
+                                    <select id="exchangeRate" class="form-select">
+                                    
+                                    </select>
+                                    <label for="exchangeRate">Convert to</label>
+                                </div>
                             </td>
-                            
-                            <td id="result" class="text-end">
-                            
+                        </tr>
+                        
+                        <tr>
+                            <td colspan="3">
+                                <div class="form-floating">
+                                    <input id="toAmount" type="text" class="form-control" disabled>
+                                    <label for="toAmount">Result</label>
+                                </div>
                             </td>
-                        </tr> 
+                        </tr>
 
                     </table>
                 </div>
@@ -400,13 +270,6 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- Button to view time button -->
-    <div id="timeButtn" class="position-absolute">
-        <button class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#timeModal">
-            <i class="bi bi-clock fs-3"></i>
-        </button>
     </div>
 
     <!--Time Modal Overlay -->
@@ -431,7 +294,21 @@
                             <td id="tZone" class="text-end">
                                 
                             </td>
-                        </tr>      
+                        </tr>   
+                        
+                         <tr>
+                            <td class="text-center">
+                                <i class="fa-solid fa-book-atlas fa-xl text-success"></i>
+                            </td>
+                            
+                            <td>
+                                <strong>Number of Timezones</strong>
+                            </td>
+                            
+                            <td id="tZoneNum" class="text-end">
+                                
+                            </td>
+                        </tr>   
 
                         <tr>
                             <td class="text-center">
@@ -443,34 +320,6 @@
                             </td>
                             
                             <td id="timezoneId" class="text-end">
-                                
-                            </td>
-                        </tr>    
-
-                        <tr>
-                            <td class="text-center">
-                                <i class="fa-solid fa-sun fa-xl text-success"></i>
-                            </td>
-                            
-                            <td>
-                                <strong>Sunrise</strong>
-                            </td>
-                            
-                            <td id="sunrise" class="text-end">
-                                
-                            </td>
-                        </tr>    
-
-                        <tr>
-                            <td class="text-center">
-                                <i class="fa-solid fa-cloud-sun fa-xl text-success"></i>
-                            </td>
-                            
-                            <td>
-                                <strong>Sunset</strong>
-                            </td>
-                            
-                            <td id="sunset" class="text-end">
                                 
                             </td>
                         </tr>    
@@ -502,6 +351,36 @@
                                 
                             </td>
                         </tr>
+
+                        <tr>
+                            <td class="text-center">
+                                <i class="fa-solid fa-sun fa-xl text-success"></i>
+                            </td>
+                            
+                            <td>
+                                <strong>Sunrise</strong>
+                            </td>
+                            
+                            <td id="sunrise" class="text-end">
+                                
+                            </td>
+                        </tr>    
+
+                        <tr>
+                            <td class="text-center">
+                                <i class="fa-solid fa-cloud-sun fa-xl text-success"></i>
+                            </td>
+                            
+                            <td>
+                                <strong>Sunset</strong>
+                            </td>
+                            
+                            <td id="sunset" class="text-end">
+                                
+                            </td>
+                        </tr>    
+
+                        
                     </table>
                 </div>
                 <div class="modal-footer">
@@ -511,14 +390,7 @@
         </div>
     </div>
 
-    <!-- Button to view time button -->
-    <div id="wikiButtn" class="position-absolute">
-        <button class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#wikiModal">
-            <i class="bi bi-icon fs-3">W</i>
-        </button>
-    </div>
-
-    <!--Time Modal Overlay -->
+    <!--Wiki Modal Overlay -->
     <div id="wikiModal" class="modal" data-bs-backdrop="false" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content shadow">
@@ -554,20 +426,92 @@
         </div>
     </div>
 
-    <!-- Map element div -->
-    <div id="map"></div>
-    <script src = "mapScript.js"></script>
-
+    <!-- Setting Modal Overlay -->
+     <div id="settingsModal" class="modal" data-bs-backdrop="false" tabindex="-1">
+  
+        <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">
+            
+            <div class="modal-content shadow">
+            
+                <div class="modal-header bg-primary bg-gradient text-white">
+                    <h5 class="modal-title"><i class="fa-solid fa-cog fa-xl me-2"></i>Settings</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>           
+                
+                <div class="modal-body">
+                    
+                    <div class="form-check">
+                    <input id="showPrimInfo" class="form-check-input" type="checkbox" checked>
+                    <label class="form-check-label" for="showPrimInfo">
+                        Show 'Country Info' when a new country is selected
+                    </label>
+                    </div>
+                        
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-primary btn-sm" data-bs-dismiss="modal">Close</button>
+                </div>
+            
+            </div>
+            
+        </div>
     
-    <!-- EasyButton JS -->
-    <script src="https://cdn.jsdelivr.net/npm/leaflet-easybutton@2.4.0/src/easy-button.js"></script>
+    </div>
+
+    <!--News Modal Overlay -->
+     <div id="newsModal" class="modal" data-bs-backdrop="false" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content shadow">
+                <div class="modal-header bg-success bg-gradient text-white">
+                    <h5 id ="newsModalTitle" class="modal-title">Latest News</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                
+                    <div id="newsModalBody" class="modal-body">
+                        
+                    </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-success btn-sm" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- button to catch focus -->
+    <button id="focusCatcher" class="visually-hidden" tabindex="-1">Focus Catcher</button>
+
+
+
+    <!-- Scripts -->
+    <!--  -->
+    
+    <!-- Jquery js -->
+    <script src="library/jquery-3.7.1.min.js"></script>
 
     <!-- Bootstrap js file -->
-    <script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-    crossorigin="anonymous"
-    ></script>
+    <script src="library/bootstrap/js/bootstrap.bundle.min.js"></script>
 
+    <!-- leaflet javascript file -->
+    <script src="library/leaflet/js/leaflet.js"></script>
+
+    <!-- Leaflet EasyButton js -->
+    <script src="library/leaflet-easybutton/js/easy-button.js"></script>
+
+    <!-- Leaflet extra marker js file -->
+    <script src="library/leaflet-extra-markers/js/leaflet.extra-markers.min.js"></script>
+
+    <!-- Leaflet marker cluster js file -->
+    <script src="library/leaflet-marker-cluster/js/leaflet.markercluster.js"></script>
+
+    <!-- datejs js file -->
+    <script src="library/datejs.min.js"></script>
+
+    <!-- map js file -->
+    <script src = "mapScript.js"></script>
 </body>
 </html>
+
+
+<!--rectify leaflet 3 issues-->
