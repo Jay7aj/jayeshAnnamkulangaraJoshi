@@ -50,11 +50,11 @@ function getBaseLayers() {
         //     maxZoom: 18,
         //     attribution: 'Map <a href="https://memomaps.de/">memomaps.de</a>, © OpenStreetMap contributors'
         // }),
-        'Satellite': L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_satellite/{z}/{x}/{y}{r}.jpg', {
+        'Satellite': L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_satellite/{z}/{x}/{y}{r}.jpg?api_key=8b1c8461-a057-4db1-a190-4d7bd983b1e8', {
             maxZoom: 20,
             attribution: '&copy; CNES, Airbus DS, PlanetObserver, OpenMapTiles, OpenStreetMap'
         }),
-        'Watercolor': L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_watercolor/{z}/{x}/{y}.jpg', {
+        'Watercolor': L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_watercolor/{z}/{x}/{y}.jpg?api_key=8b1c8461-a057-4db1-a190-4d7bd983b1e8', {
             maxZoom: 16,
             attribution: '&copy; Stamen, Stadia Maps, OpenMapTiles, OpenStreetMap'
         }),
@@ -385,7 +385,7 @@ function getCountryDropdown() {
                 resolve();
             },
             error: function(err) {
-                console.error("Dropdown AJAX error", err);
+                // console.error("Dropdown AJAX error", err);
                 alert("Error in Dropdown: ",err.statusText);
                 reject(err);
                 hideLoader();
