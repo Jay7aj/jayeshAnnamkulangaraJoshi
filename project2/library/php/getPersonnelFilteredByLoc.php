@@ -1,7 +1,8 @@
+
 <?php
 
 	// example use from browser
-	// http://localhost/project2/library/php/deleteDepartmentByID.php?id=<id>
+	// http://localhost/project2/library/php/getPersonnelFilteredByLoc.php?locationID=<id>
 
 
 	$executionStartTime = microtime(true);
@@ -28,38 +29,35 @@
 
 	}	
 
-	// code to check if department is assigned to personnel
+	// SQL does not accept parameters and so is not prepared
 
-	$checkQuery = $conn->prepare('SELECT COUNT(id) as count FROM personnel WHERE departmentID = ?');
+	$query = "SELECT p.id, p.firstName, p.lastName, p.jobTitle, p.email, d.name as department, l.name as location
+          FROM personnel p
+          LEFT JOIN department d ON p.departmentID = d.id
+          LEFT JOIN location l ON d.locationID = l.id
+          WHERE 1=1 ";
 
-	$checkQuery->bind_param("i", $_POST['id']);
+    $params = [];
+    $types = "";
 
-	$checkQuery->execute();
+    if (!empty($_POST['locationID'])) {
+        $query .= " AND l.id = ?";
+        $params[] = $_POST['locationID'];
+        $types .= "i";
+    }
 
-	$checkResult = $checkQuery->get_result()->fetch_assoc();
+	$query .= " ORDER BY p.lastName, p.firstName, d.name, l.name";
+    $stmt = $conn->prepare($query);
 
-	if ($checkResult['count'] > 0) {
-		$output['status']['code'] = "409";
-		$output['status']['name'] = "conflict";
-		$output['status']['description'] = "Cannot delete: Department is assigned to personnel.";
-		$output['returnedIn'] = (microtime(true) - $executionStartTime) / 1000 . " ms";
-		$output['data'] = [];
-
-		mysqli_close($conn);
-		echo json_encode($output);
-		exit;
-	}
-
-	// SQL statement accepts parameters and so is prepared to avoid SQL injection.
-	// $_REQUEST used for development / debugging. Remember to change to $_POST for production
-
-	$query = $conn->prepare('DELETE FROM department WHERE id = ?');
+    if (!empty($params)) {
+        $stmt->bind_param($types, ...$params);
+    }
 	
-	$query->bind_param("i", $_POST['id']);
+    $stmt->execute();
+	 
+    $result = $stmt->get_result();
 
-	$query->execute();
-	
-	if (false === $query) {
+	if (!$result) {
 
 		$output['status']['code'] = "400";
 		$output['status']['name'] = "executed";
@@ -73,12 +71,20 @@
 		exit;
 
 	}
+   
+   	$data = [];
+
+	while ($row = mysqli_fetch_assoc($result)) {
+
+		array_push($data, $row);
+
+	}
 
 	$output['status']['code'] = "200";
 	$output['status']['name'] = "ok";
 	$output['status']['description'] = "success";
 	$output['status']['returnedIn'] = (microtime(true) - $executionStartTime) / 1000 . " ms";
-	$output['data'] = [];
+	$output['data'] = $data;
 	
 	mysqli_close($conn);
 

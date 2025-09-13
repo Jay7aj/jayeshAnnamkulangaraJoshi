@@ -32,7 +32,7 @@
     $locationId = $_POST['id'];
 
 	// Check if location is assigned to department
-	$checkDept = $conn->prepare('SELECT COUNT(*) as deptCount FROM department WHERE locationID = ?');
+	$checkDept = $conn->prepare('SELECT COUNT(id) as deptCount FROM department WHERE locationID = ?');
 
 	$checkDept->bind_param("i", $locationId);
 

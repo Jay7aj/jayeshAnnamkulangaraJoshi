@@ -1,8 +1,7 @@
 <?php
 
 	// example use from browser
-	// http://localhost/project2/library/php/deleteDepartmentByID.php?id=<id>
-
+	// http://localhost/project2/library/php/getDepartmentEntryCountByID.php?id=<id>
 
 	$executionStartTime = microtime(true);
 
@@ -19,17 +18,48 @@
 		$output['status']['description'] = "database unavailable";
 		$output['status']['returnedIn'] = (microtime(true) - $executionStartTime) / 1000 . " ms";
 		$output['data'] = [];
-
+		
 		mysqli_close($conn);
 
 		echo json_encode($output);
-
+		
 		exit;
 
 	}	
 
-	// code to check if department is assigned to personnel
+	// SQL statement accepts parameters and so is prepared to avoid SQL injection.
 
+	$query = $conn->prepare('SELECT id, name, locationID FROM department WHERE id =  ?');
+
+	$query->bind_param("i", $_POST['id']);
+
+	$query->execute();
+	
+	if (false === $query) {
+
+		$output['status']['code'] = "400";
+		$output['status']['name'] = "executed";
+		$output['status']['description'] = "query failed";	
+		$output['data'] = [];
+
+		echo json_encode($output); 
+	
+		mysqli_close($conn);
+		exit;
+
+	}
+
+	$result = $query->get_result();
+
+   	$department = [];
+
+	while ($row = mysqli_fetch_assoc($result)) {
+
+		array_push($department, $row);
+
+	}
+
+	// second query
 	$checkQuery = $conn->prepare('SELECT COUNT(id) as count FROM personnel WHERE departmentID = ?');
 
 	$checkQuery->bind_param("i", $_POST['id']);
@@ -37,29 +67,8 @@
 	$checkQuery->execute();
 
 	$checkResult = $checkQuery->get_result()->fetch_assoc();
-
-	if ($checkResult['count'] > 0) {
-		$output['status']['code'] = "409";
-		$output['status']['name'] = "conflict";
-		$output['status']['description'] = "Cannot delete: Department is assigned to personnel.";
-		$output['returnedIn'] = (microtime(true) - $executionStartTime) / 1000 . " ms";
-		$output['data'] = [];
-
-		mysqli_close($conn);
-		echo json_encode($output);
-		exit;
-	}
-
-	// SQL statement accepts parameters and so is prepared to avoid SQL injection.
-	// $_REQUEST used for development / debugging. Remember to change to $_POST for production
-
-	$query = $conn->prepare('DELETE FROM department WHERE id = ?');
 	
-	$query->bind_param("i", $_POST['id']);
-
-	$query->execute();
-	
-	if (false === $query) {
+	if (!$checkResult) {
 
 		$output['status']['code'] = "400";
 		$output['status']['name'] = "executed";
@@ -73,15 +82,19 @@
 		exit;
 
 	}
+   
+   	$count = $checkResult["count"];
+
 
 	$output['status']['code'] = "200";
 	$output['status']['name'] = "ok";
 	$output['status']['description'] = "success";
 	$output['status']['returnedIn'] = (microtime(true) - $executionStartTime) / 1000 . " ms";
-	$output['data'] = [];
-	
-	mysqli_close($conn);
+	$output['data']['department'] = $department;
+	$output['data']['count'] = $count;
 
 	echo json_encode($output); 
+
+	mysqli_close($conn);
 
 ?>

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employ List</title>
+    <title>Company Directory</title>
 
     <!-- Favicon -->
     <link rel="icon" href="favicon.ico" type="image/x-icon">
@@ -159,7 +159,7 @@
                         </div>
 
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="editPersonnelJobTitle" placeholder="Job Title" required>
+                            <input type="text" class="form-control" id="editPersonnelJobTitle" placeholder="Job Title">
                             <label for="editPersonnelJobTitle">Job Title</label>
                         </div>          
 
@@ -169,7 +169,7 @@
                         </div>    
 
                         <div class="form-floating">
-                            <select class="form-select" id="editPersonnelDepartment" placeholder="Department">
+                            <select class="form-select" id="editPersonnelDepartment" placeholder="Department" required>
                             </select>
                             <label for="editPersonnelDepartment">Department</label>
                         </div>  
@@ -218,7 +218,7 @@
                         </div>  
 
                         <div class="form-floating">
-                            <select class="form-select" id="editDepartmentLocation" placeholder="Location">
+                            <select class="form-select" id="editDepartmentLocation" placeholder="Location" required>
                             </select>
                             <label for="editDepartmentLocation">Location</label>
                         </div>  
@@ -315,8 +315,7 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="submit" form="filterPersonnelForm" class="btn btn-outline-primary btn-sm myBtn">FILTER</button>
-                    <button type="button" class="btn btn-outline-primary btn-sm myBtn" data-bs-dismiss="modal">CANCEL</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm myBtn" data-bs-dismiss="modal">CLOSE</button>
                 </div>
         
             </div>
@@ -357,7 +356,7 @@
                         </div>
 
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="addPersonnelJobTitle" name="jobTitle" placeholder="Job Title" required>
+                            <input type="text" class="form-control" id="addPersonnelJobTitle" name="jobTitle" placeholder="Job Title">
                             <label for="addPersonnelJobTitle">Job Title</label>
                         </div>          
 
@@ -367,7 +366,7 @@
                         </div>    
 
                         <div class="form-floating">
-                            <select class="form-select" id="addPersonnelDepartment" name="department" placeholder="Department">
+                            <select class="form-select" id="addPersonnelDepartment" name="department" placeholder="Department" required>
                             </select>
                             <label for="addPersonnelDepartment">Department</label>
                         </div>  
@@ -414,7 +413,7 @@
                         </div> 
 
                         <div class="form-floating">
-                            <select class="form-select" id="addDepartmentLocation" placeholder="Location">
+                            <select class="form-select" id="addDepartmentLocation" placeholder="Location" required>
                             </select>
                             <label for="addDepartmentLocation">Location</label>
                         </div>  
@@ -486,7 +485,7 @@
             <div class="modal-content shadow"> 
             
                 <div class="modal-header bg-primary bg-gradient text-white">
-                    <h5 class="modal-title">Delete Personnel</h5>
+                    <h5 class="modal-title">Delete Employ Entry</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
@@ -496,8 +495,8 @@
 
                         <input type="hidden" id="deletePersonnelID" name="id">
 
-                        <div class="text-center">
-                            <p>Confirm to delete Personnel details.</p>
+                        <div id="deletePersonnelModalMessage" class="text-center">
+                            <!-- populated from js -->
                         </div> 
 
                     </form>
@@ -505,8 +504,8 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="submit" form="deletePersonnelForm" class="btn btn-outline-danger btn-sm myBtn" >Confirm</button>
-                    <button type="button" class="btn btn-outline-primary btn-sm myBtn" data-bs-dismiss="modal">CANCEL</button>
+                    <button type="submit" id="delPersConfirm" form="deletePersonnelForm" class="btn btn-outline-primary btn-sm myBtn" >YES</button>
+                    <button type="button" id="delPersReject" class="btn btn-outline-primary btn-sm myBtn" data-bs-dismiss="modal">NO</button>
                 </div>
         
             </div>
@@ -536,8 +535,8 @@
 
                         <input type="hidden" id="deleteDepartmentID" name="id">
 
-                        <div class="text-center">
-                            <p>Confirm to delete Department details.</p>
+                        <div id="deleteDepartmentModalMessage" class="text-center">
+                            <!-- populated from js -->
                         </div> 
 
                     </form>
@@ -545,8 +544,8 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="submit" form="deleteDepartmentForm" class="btn btn-outline-danger btn-sm myBtn">Confirm</button>
-                    <button type="button" class="btn btn-outline-primary btn-sm myBtn" data-bs-dismiss="modal">CANCEL</button>
+                    <button type="submit" id="delDeprtConfirm" form="deleteDepartmentForm" class="btn btn-outline-primary btn-sm myBtn">Yes</button>
+                    <button type="button" id="delDeprtReject" class="btn btn-outline-primary btn-sm myBtn" data-bs-dismiss="modal">NO</button>
                 </div>
         
             </div>
@@ -576,8 +575,8 @@
 
                         <input type="hidden" id="deleteLocationID" name="id">
 
-                        <div class="text-center">
-                            <p>Confirm to delete Location.</p>
+                        <div id="deleteLocationModalMessage" class="text-center">
+                            <!-- populated from js -->
                         </div> 
 
                     </form>
@@ -585,8 +584,41 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="submit" form="deleteLocationForm" class="btn btn-outline-danger btn-sm myBtn">Confirm</button>
-                    <button type="button" class="btn btn-outline-primary btn-sm myBtn" data-bs-dismiss="modal">CANCEL</button>
+                    <button id="delLocConfirm" type="submit" form="deleteLocationForm" class="btn btn-outline-primary btn-sm myBtn">YES</button>
+                    <button id="delLocReject" type="button" class="btn btn-outline-primary btn-sm myBtn" data-bs-dismiss="modal">NO</button>
+                </div>
+        
+            </div>
+            
+        </div>
+    
+    </div>
+
+    <!-- Message modal -->
+     <div id="messageModal" class="modal fade" tabindex="-1" data-bs-backdrop="false" data-bs-keyboard="false" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    
+        <!--   the last two classes centre the modal and, if the content is too long, ensures  -->
+        <!--   that the header and footer are always on display by making the body scroll -->
+        
+        <div class="modal-dialog modal-sm modal-dialog-centered modal-dialog-scrollable">
+            
+            <div class="modal-content shadow"> 
+            
+                <div class="modal-header bg-primary bg-gradient text-white">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    
+                    <div id="messageModalMessage" class="text-center">
+                        <!-- populated from js -->
+                    </div>                  
+
+                </div>
+
+                <div class="modal-footer">
+                    <button id="messageClose" type="button" class="btn btn-outline-primary btn-sm myBtn" data-bs-dismiss="modal">OK</button>
                 </div>
         
             </div>
@@ -596,16 +628,13 @@
     </div>
 
 
-
-
-
-
+    
+    <!-- jquery js -->
+    <script src="library/jquery-3.7.1.min.js"></script>
 
     <!-- Bootstrap JavaScript (includes Popper for dropdowns, modals, etc.) -->
     <script src="library/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <!-- jquery js -->
-    <script src="library/jquery-3.7.1.min.js"></script>
     <!-- script.js -->
     <script src="script.js"></script>
 </body>

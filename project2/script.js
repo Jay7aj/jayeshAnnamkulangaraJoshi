@@ -1,44 +1,92 @@
 
 // function to load all personnel data
 function loadPersonnel() {
+
+  document.getElementById("searchInp").value = "";
+
   $.ajax({
     url: "library/php/getAll.php",
     type: "POST",
     dataType: "json",
     success: function (result) {
       if (result.status.code == "200") {
-        let rows = "";
+
+        const personnelTable = document.getElementById("personnelTableBody");
+        personnelTable.innerHTML = "";
+
+        const frag = document.createDocumentFragment();
 
         $.each(result.data, function () {
-          rows += `
-            <tr>
-              <td class="align-middle">${this.lastName} ${this.firstName}</td>
-              <td class="align-middle d-none d-md-table-cell">${this.jobTitle}</td>
-              <td class="align-middle d-none d-md-table-cell">${this.department}</td>
-              <td class="align-middle d-none d-md-table-cell">${this.location}</td>
-              <td class="align-middle d-none d-md-table-cell">${this.email}</td>
-              <td class="text-end">
-                <button type="button" class="btn btn-primary btn-sm"
-                  data-bs-toggle="modal" 
-                  data-bs-target="#editPersonnelModal" 
-                  data-id="${this.id}">
-                  <i class="fa-solid fa-pencil"></i>
-                </button>
-                <button type="button" class="btn btn-danger btn-sm " data-bs-toggle="modal" data-bs-target="#deletePersonnelModal" data-id="${this.id}">
-                    <i class="fa-solid fa-trash fa-fw"></i>
-                </button>
-              </td>
-            </tr>
-          `;
+
+          let row = document.createElement("tr");
+
+          let nameCell = document.createElement("td");
+          nameCell.classList.add("align-middle");
+          nameCell.textContent = `${this.lastName}, ${this.firstName}`;
+          row.append(nameCell);
+
+          let titleCell = document.createElement("td");
+          titleCell.classList.add("align-middle");
+          titleCell.textContent = this.jobTitle;
+          row.append(titleCell);
+
+          let departmentCell = document.createElement("td");
+          departmentCell.classList.add("align-middle");
+          departmentCell.textContent = this.department;
+          row.append(departmentCell);
+
+          let locationCell = document.createElement("td");
+          locationCell.classList.add("align-middle");
+          locationCell.textContent = this.location;
+          row.append(locationCell);
+
+          let emailCell = document.createElement("td");
+          emailCell.classList.add("align-middle");
+          emailCell.textContent = this.email;
+          row.append(emailCell);
+
+          let actionCell = document.createElement("td");
+          actionCell.classList.add("text-end");
+
+          const editButtn = document.createElement("button");
+          editButtn.type = "button";
+          editButtn.className = "btn btn-primary btn-sm";
+          editButtn.setAttribute("data-bs-toggle", "modal");
+          editButtn.setAttribute("data-bs-target", "#editPersonnelModal");
+          editButtn.setAttribute("data-id", this.id);
+          editButtn.innerHTML= '<i class="fa-solid fa-pencil"></i>';
+
+          const deleteBttn = document.createElement("button");
+          deleteBttn.type = "button";
+          deleteBttn.className = "btn btn-primary btn-sm";
+          deleteBttn.setAttribute("data-bs-toggle", "modal");
+          deleteBttn.setAttribute("data-bs-target", "#deletePersonnelModal");
+          deleteBttn.setAttribute("data-id", this.id);
+          deleteBttn.innerHTML = '<i class="fa-solid fa-trash fa-fw"></i>';
+
+          actionCell.append(editButtn, " ", deleteBttn);
+          row.append(actionCell);
+
+          frag.append(row);
+
         });
-        $("#personnelTableBody").html(rows);
+
+        personnelTable.append(frag);
+
       } else {
-        alert("Error: " + result.status.description);
+        let messageModal = new bootstrap.Modal(document.getElementById("messageModal"));
+        document.querySelector("#messageModal .modal-title").innerHTML = "ERROR:";
+        document.getElementById("messageModalMessage").innerHTML = "Error: "+ result.status.description;
+        messageModal.show();
       }
     },
     error: function (xhr, status, error) {
       console.error("AJAX Error:", status, error);
-      alert("Could not load personnel.");
+      let messageModal = new bootstrap.Modal(document.getElementById("messageModal"));
+      document.querySelector("#messageModal .modal-title").innerHTML = "ERROR:";
+      document.getElementById("messageModalMessage").innerHTML = "Could not load personnel data" ;
+      messageModal.show();
+      
     }
   });
 }
@@ -51,36 +99,68 @@ function loadDepartment(){
     dataType: "json",
     success:function(result){
       if(result.status.code == 200){
-        let rows = "";
+        
+        const departmentTable = document.getElementById("departmentTableBody");
+
+        departmentTable.innerHTML= "";
+
+        const frag = document.createDocumentFragment();
+        
 
         $.each(result.data, function(){
-          rows +=`
-            <tr>
-                <td class="align-middle text-nowrap">
-                  ${this.department}
-                </td>
-                <td class="align-middle text-nowrap d-none d-md-table-cell">
-                  ${this.location}
-                </td>
-                <td class="align-middle text-end text-nowrap">
-                  <button type="button" class="btn btn-primary btn-sm"
-                    data-bs-toggle="modal" 
-                    data-bs-target="#editDepartmentModal" 
-                    data-id="${this.id}">
-                    <i class="fa-solid fa-pencil"></i>
-                  </button>
-                  <button type="button" class="btn btn-danger btn-sm " data-bs-toggle="modal" data-bs-target="#deleteDepartmentModal" data-id="${this.id}">
-                      <i class="fa-solid fa-trash fa-fw"></i>
-                  </button>
-                </td>
-            </tr> 
-          `;
+
+          let row = document.createElement("tr");
+
+          let deprtCell = document.createElement("td");
+          deprtCell.className = "align-middle text-nowrap";
+          deprtCell.textContent = this.department;
+          row.append(deprtCell);
+          
+          let locCell = document.createElement("td");
+          locCell.className = "align-middle text-nowrap d-none d-md-table-cell";
+          locCell.textContent = this.location;
+          row.append(locCell);
+
+          let actionCell = document.createElement("td");
+          actionCell.className = "align-middle text-end text-nowrap";
+
+          let editButtn = document.createElement("button");
+          editButtn.type = "button";
+          editButtn.className = "btn btn-primary btn-sm";
+          editButtn.setAttribute("data-bs-toggle", "modal");
+          editButtn.setAttribute("data-bs-target", "#editDepartmentModal");
+          editButtn.setAttribute("data-id", this.id);
+          editButtn.innerHTML = `<i class="fa-solid fa-pencil"></i>`;
+
+          let deleteButtn = document.createElement("button");
+          deleteButtn.type = "button";
+          deleteButtn.className = "btn btn-primary btn-sm";
+          deleteButtn.setAttribute("data-bs-toggle", "modal");
+          deleteButtn.setAttribute("data-bs-target", "#deleteDepartmentModal");
+          deleteButtn.setAttribute("data-id", this.id);
+          deleteButtn.innerHTML = `<i class="fa-solid fa-trash fa-fw"></i>`;
+
+          actionCell.append(editButtn," ", deleteButtn);
+          row.append(actionCell);
+
+          frag.append(row);
+
         })
-        $("#departmentTableBody").html(rows);
+        
+        departmentTable.append(frag);
+        
+      }else{
+        let messageModal = new bootstrap.Modal(document.getElementById("messageModal"));
+        document.querySelector("#messageModal .modal-title").innerHTML = "ERROR:";
+        document.getElementById("messageModalMessage").innerHTML = "Error: "+ result.status.description;
+        messageModal.show();
       }
     },error:function(xhr, status, error){
       console.error("AJAX Error:", status, error);
-      alert("Could not load Departments");
+      let messageModal = new bootstrap.Modal(document.getElementById("messageModal"));
+      document.querySelector("#messageModal .modal-title").innerHTML = "ERROR:";
+      document.getElementById("messageModalMessage").innerHTML = "Could not load departments." ;
+      messageModal.show();
     }
   })
 }
@@ -93,35 +173,113 @@ function loadLocations(){
     dataType: "json",
     success:function(result){
       if(result.status.code == 200){
-        let rows = "";
+        
+        const locationTable = document.getElementById("locationTableBody");
+        locationTable.innerHTML = "";
+
+        const frag = document.createDocumentFragment();
 
         $.each(result.data, function(){
-          rows +=`
-            <tr>
-                <td class="align-middle text-nowrap">
-                  ${this.name}
-                </td>
-                <td class="align-middle text-end text-nowrap">
-                  <button type="button" class="btn btn-primary btn-sm"
-                    data-bs-toggle="modal" 
-                    data-bs-target="#editLocationModal" 
-                    data-id="${this.id}">
-                    <i class="fa-solid fa-pencil"></i>
-                  </button>
-                  <button type="button" class="btn btn-danger btn-sm " data-bs-toggle="modal" data-bs-target="#deleteLocationModal" data-id="${this.id}">
-                      <i class="fa-solid fa-trash fa-fw"></i>
-                  </button>
-                </td>
-            </tr>
-          `;
+
+          let row = document.createElement("tr");
+
+          let locCell = document.createElement("td");
+          locCell.className = "align-middle text-nowrap";
+          locCell.textContent = this.name;
+          row.append(locCell);
+
+          let actionCell = document.createElement("td");
+          actionCell.className = "align-middle text-end text-nowrap";
+
+          let editButtn = document.createElement("button");
+          editButtn.type = "button";
+          editButtn.className = "btn btn-primary btn-sm";
+          editButtn.setAttribute("data-bs-toggle", "modal");
+          editButtn.setAttribute("data-bs-target", "#editLocationModal");
+          editButtn.setAttribute("data-id", this.id);
+          editButtn.innerHTML = `<i class="fa-solid fa-pencil"></i>`;
+
+          let deleteButtn = document.createElement("button");
+          deleteButtn.type = "button";
+          deleteButtn.className = "btn btn-primary btn-sm";
+          deleteButtn.setAttribute("data-bs-toggle", "modal");
+          deleteButtn.setAttribute("data-bs-target", "#deleteLocationModal");
+          deleteButtn.setAttribute("data-id", this.id);
+          deleteButtn.innerHTML = `<i class="fa-solid fa-trash fa-fw"></i>`
+
+          actionCell.append(editButtn, " ", deleteButtn);
+          row.append(actionCell);
+
+          frag.append(row);
+
         })
-        $("#locationTableBody").html(rows);
+        
+        locationTable.append(frag);
+
+      }else{
+        let messageModal = new bootstrap.Modal(document.getElementById("messageModal"));
+        document.querySelector("#messageModal .modal-title").innerHTML = "ERROR:";
+        document.getElementById("messageModalMessage").innerHTML = "Error: "+ result.status.description;
+        messageModal.show();
       }
     },error:function(xhr, status, error){
       console.error("AJAX Error:", status, error);
-      alert("Could not load Locations");
+      let messageModal = new bootstrap.Modal(document.getElementById("messageModal"));
+      document.querySelector("#messageModal .modal-title").innerHTML = "ERROR:";
+      document.getElementById("messageModalMessage").innerHTML = "Could not load locations." ;
+      messageModal.show();
     }
   })
+}
+
+function updateFilterBtn(){
+  let filterIcon = document.getElementById("filterBtn");
+
+  if ($("#personnelBtn").hasClass("active")) {
+ 
+    filterIcon.disabled = false;
+    
+  } else {
+    
+    if ($("#departmentsBtn").hasClass("active")) {
+   
+      filterIcon.disabled = true;
+    } else {
+     
+      filterIcon.disabled = true;
+    }
+    
+  }
+  
+}
+
+function updateSearchBar(){
+
+  let searchBar = document.getElementById("searchInp");
+
+  if ($("#personnelBtn").hasClass("active")) {
+ 
+    searchBar.disabled = false;
+    
+  } else {
+    
+    if ($("#departmentsBtn").hasClass("active")) {
+   
+      searchBar.disabled = true;
+    } else {
+     
+      searchBar.disabled = true;
+    }
+    
+  }
+}
+
+function toogleFilterBtnActive(){
+  if((deptID !== "") || (locID !== "")){
+    document.getElementById("filterBtn").classList.add("active");
+  }else{
+    document.getElementById("filterBtn").classList.remove("active");
+  }
 }
 
 // handler to load data on page load
@@ -135,58 +293,105 @@ $(document).ready(()=>{
 
 // handler for search key
 $("#searchInp").on("keyup", function () {
+  deptID="";
+  locID="";
+  toogleFilterBtnActive();
+  updateFilterBtn();
   
+
   let input=$(this).val().trim();
 
   $.ajax({
     url: "library/php/searchAll.php",
     type: "POST",
+
     dataType: "json",
     data: { txt: input },
     success: function (result) {
 
       if (result.status.code === "200") {
-        let rows = "";
 
-        $("#personnelTableBody").html("");
+        if ($("#personnelBtn").hasClass("active")) {
+ 
+          const personnelTable = document.getElementById("personnelTableBody");
+          personnelTable.innerHTML = "";
 
-        if (result.data.found.length > 0) {
+          const frag = document.createDocumentFragment();
 
-          $.each(result.data.found, function () {
+          if (result.data.found.length > 0) {
 
-            rows += `
-              <tr>
-              <td class="align-middle">${this.lastName} ${this.firstName}</td>
-              <td class="align-middle d-none d-md-table-cell">${this.jobTitle}</td>
-              <td class="align-middle d-none d-md-table-cell">${this.departmentName}</td>
-              <td class="align-middle d-none d-md-table-cell">${this.locationName}</td>
-              <td class="align-middle d-none d-md-table-cell">${this.email}</td>
-              <td class="text-end">
-                <button type="button" class="btn btn-primary btn-sm"
-                  data-bs-toggle="modal" 
-                  data-bs-target="#editPersonnelModal" 
-                  data-id="${this.id}">
-                  <i class="fa-solid fa-pencil"></i>
-                </button>
-                <button type="button" class="btn btn-danger btn-sm " data-bs-toggle="modal" data-bs-target="#deletePersonnelModal" data-id="${this.id}">
-                    <i class="fa-solid fa-trash fa-fw"></i>
-                </button>
-              </td>
-            </tr>
-            `;
+            
+            $.each(result.data.found, function () {
 
-          });
+              let row = document.createElement("tr");
 
-        } else {
+              let nameCell = document.createElement("td");
+              nameCell.classList.add("align-middle");
+              nameCell.textContent = `${this.lastName}, ${this.firstName}`;
+              row.append(nameCell);
 
-          rows = `
-            <tr>
-              <td colspan="7" class="text-center">No results found</td>
-            </tr>
-          `;
+              let titleCell = document.createElement("td");
+              titleCell.classList.add("align-middle");
+              titleCell.textContent = this.jobTitle;
+              row.append(titleCell);
+
+              let departmentCell = document.createElement("td");
+              departmentCell.classList.add("align-middle");
+              departmentCell.textContent = this.departmentName;
+              row.append(departmentCell);
+
+              let locationCell = document.createElement("td");
+              locationCell.classList.add("align-middle");
+              locationCell.textContent = this.locationName;
+              row.append(locationCell);
+
+              let emailCell = document.createElement("td");
+              emailCell.classList.add("align-middle");
+              emailCell.textContent = this.email;
+              row.append(emailCell);
+
+              let actionCell = document.createElement("td");
+              actionCell.classList.add("text-end");
+
+              const editButtn = document.createElement("button");
+              editButtn.type = "button";
+              editButtn.className = "btn btn-primary btn-sm";
+              editButtn.setAttribute("data-bs-toggle", "modal");
+              editButtn.setAttribute("data-bs-target", "#editPersonnelModal");
+              editButtn.setAttribute("data-id", this.id);
+              editButtn.innerHTML= '<i class="fa-solid fa-pencil"></i>';
+
+              const deleteBttn = document.createElement("button");
+              deleteBttn.type = "button";
+              deleteBttn.className = "btn btn-primary btn-sm";
+              deleteBttn.setAttribute("data-bs-toggle", "modal");
+              deleteBttn.setAttribute("data-bs-target", "#deletePersonnelModal");
+              deleteBttn.setAttribute("data-id", this.id);
+              deleteBttn.innerHTML = '<i class="fa-solid fa-trash fa-fw"></i>';
+
+              actionCell.append(editButtn, " ", deleteBttn);
+              row.append(actionCell);
+
+              frag.append(row);
+
+            });
+            
+          } else {
+
+            let row = document.createElement("tr");
+            let notFoundCell = document.createElement("td");
+            notFoundCell.setAttribute("colspan", "7");
+            notFoundCell.className = "text-center";
+            notFoundCell.textContent = "No results found";
+
+            row.append(notFoundCell);
+            frag.append(row);
+
+          }
+
+          personnelTable.append(frag);
+          
         }
-
-        $("#personnelTableBody").html(rows);
 
       } else {
         console.error("Search failed:", result.status.description);
@@ -219,11 +424,56 @@ $("#refreshBtn").click(function () {
     }
     
   }
+
+  updateFilterBtn();
   
 });
 
+$("#personnelBtn").click(function () {
+  
+  // Call function to refresh personnel table
+
+  if (deptID !== "") {
+    document.getElementById("filterPersonnelDepartment").dispatchEvent(new Event("change"));
+
+  } else if (locID !== "") {
+    document.getElementById("filterPersonnelLocation").dispatchEvent(new Event("change"));
+
+  } else if(document.getElementById("searchInp").value){
+    document.getElementById("searchInp").dispatchEvent(new Event("keyup"));
+  }else{
+    loadPersonnel();
+  }
+  
+  updateSearchBar();
+  updateFilterBtn();
+});
+
+$("#departmentsBtn").click(function () {
+  
+  // Call function to refresh department table
+
+  loadDepartment();
+  updateSearchBar();
+  updateFilterBtn();
+});
+
+$("#locationsBtn").click(function () {
+  
+  // Call function to refresh location table
+  
+  loadLocations();
+  updateSearchBar();
+  updateFilterBtn();
+});
+
+
+
 
 // filter Button
+
+let deptID ="";
+let locID="";
 $("#filterBtn").click(function () {
   
   // Open a modal of your own design that allows the user to apply a filter to the personnel table on either department or location
@@ -233,11 +483,13 @@ $("#filterBtn").click(function () {
 
 // handler to populate dropdown in filter modal
 $("#filterPersonnelModal").on("show.bs.modal",(e)=>{
+
+
   let deptDropdown= $("#filterPersonnelDepartment");
   let locDropdown= $("#filterPersonnelLocation");
 
-  deptDropdown.empty().append('<option value="">-- All Departments --</option>');
-  locDropdown.empty().append('<option value="">-- All Locations --</option>');
+  deptDropdown.empty().append('<option value="">-- All --</option>');
+  locDropdown.empty().append('<option value="">-- All --</option>');
 
   // populate department dropdown
   $.ajax({
@@ -258,8 +510,13 @@ $("#filterPersonnelModal").on("show.bs.modal",(e)=>{
           );
         });
 
+        deptDropdown.val(deptID);
+
       }else{
-        alert("Error: " + result.status.description);
+        
+        $("#filterPersonnelModal .modal-title").replaceWith(
+        "Error: " + result.status.description
+      );
       }
     },
     error: function (jqXHR, textStatus, errorThrown) {
@@ -289,9 +546,15 @@ $("#filterPersonnelModal").on("show.bs.modal",(e)=>{
           );
         });
 
+        locDropdown.val(locID);
       }else{
-        alert("Error: " + result.status.description);
+        
+        $("#filterPersonnelModal .modal-title").replaceWith(
+        "Error: " + result.status.description
+      );
       }
+
+
     },
     error: function (jqXHR, textStatus, errorThrown) {
       $("#filterPersonnelModal .modal-title").replaceWith(
@@ -299,65 +562,109 @@ $("#filterPersonnelModal").on("show.bs.modal",(e)=>{
       );
     }
   });
+
 })
 
-// handler to filter personnel
-$("#filterPersonnelForm").on("submit",(e)=>{
-  e.preventDefault();
+$("#filterPersonnelDepartment").on("change",(e)=>{
 
-  let deptID = $("#filterPersonnelDepartment").val();
-  let locID = $("#filterPersonnelLocation").val();
+  document.getElementById("searchInp").value = "";
+
+  deptID = $("#filterPersonnelDepartment").val();
+  $("#filterPersonnelLocation").val("");
+  locID="";
 
   $.ajax({
-    url: "library/php/getPersonnelFiltered.php",
+    url: "library/php/getPersonnelFilteredByDeprt.php",
     type: "POST",
     dataType: "json",
     data: {
-      departmentID: deptID,
-      locationID: locID
+      departmentID: deptID
     },
     success: function(result) {
-      
+
       if (result.status.code == 200) {
-        let rows = "";
+        
+        const personnelTable = document.getElementById("personnelTableBody");
+        personnelTable.innerHTML = "";
+
+        const frag = document.createDocumentFragment();
 
         if(result.data.length > 0){
+
           $.each(result.data, function () {
-          rows += `
-            <tr>
-              <td class="align-middle">${this.lastName} ${this.firstName}</td>
-              <td class="align-middle d-none d-md-table-cell">${this.jobTitle}</td>
-              <td class="align-middle d-none d-md-table-cell">${this.department}</td>
-              <td class="align-middle d-none d-md-table-cell">${this.location}</td>
-              <td class="align-middle d-none d-md-table-cell">${this.email}</td>
-              <td class="text-end">
-                <button type="button" class="btn btn-primary btn-sm"
-                  data-bs-toggle="modal" 
-                  data-bs-target="#editPersonnelModal" 
-                  data-id="${this.id}">
-                  <i class="fa-solid fa-pencil"></i>
-                </button>
-                <button type="button" class="btn btn-danger btn-sm " data-bs-toggle="modal" data-bs-target="#deletePersonnelModal" data-id="${this.id}">
-                    <i class="fa-solid fa-trash fa-fw"></i>
-                </button>
-              </td>
-            </tr>
-          `;
-        });
+
+            let row = document.createElement("tr");
+
+            let nameCell = document.createElement("td");
+            nameCell.classList.add("align-middle");
+            nameCell.textContent = `${this.lastName}, ${this.firstName}`;
+            row.append(nameCell);
+
+            let titleCell = document.createElement("td");
+            titleCell.classList.add("align-middle");
+            titleCell.textContent = this.jobTitle;
+            row.append(titleCell);
+
+            let departmentCell = document.createElement("td");
+            departmentCell.classList.add("align-middle");
+            departmentCell.textContent = this.department;
+            row.append(departmentCell);
+
+            let locationCell = document.createElement("td");
+            locationCell.classList.add("align-middle");
+            locationCell.textContent = this.location;
+            row.append(locationCell);
+
+            let emailCell = document.createElement("td");
+            emailCell.classList.add("align-middle");
+            emailCell.textContent = this.email;
+            row.append(emailCell);
+
+            let actionCell = document.createElement("td");
+            actionCell.classList.add("text-end");
+
+            const editButtn = document.createElement("button");
+            editButtn.type = "button";
+            editButtn.className = "btn btn-primary btn-sm";
+            editButtn.setAttribute("data-bs-toggle", "modal");
+            editButtn.setAttribute("data-bs-target", "#editPersonnelModal");
+            editButtn.setAttribute("data-id", this.id);
+            editButtn.innerHTML= '<i class="fa-solid fa-pencil"></i>';
+
+            const deleteBttn = document.createElement("button");
+            deleteBttn.type = "button";
+            deleteBttn.className = "btn btn-primary btn-sm";
+            deleteBttn.setAttribute("data-bs-toggle", "modal");
+            deleteBttn.setAttribute("data-bs-target", "#deletePersonnelModal");
+            deleteBttn.setAttribute("data-id", this.id);
+            deleteBttn.innerHTML = '<i class="fa-solid fa-trash fa-fw"></i>';
+
+            actionCell.append(editButtn, " ", deleteBttn);
+            row.append(actionCell);
+
+            frag.append(row);
+          });
+
         }else{
 
-          rows = `
-            <tr>
-              <td colspan="7" class="text-center">No results found</td>
-            </tr>
-          `;
+          let row = document.createElement("tr");
+          let notFoundCell = document.createElement("td");
+          notFoundCell.setAttribute("colspan", "7");
+          notFoundCell.className = "text-center";
+          notFoundCell.textContent = "No results found";
+
+          row.append(notFoundCell);
+          frag.append(row);
 
         }
         
-        $("#personnelTableBody").html(rows);
-        $("#filterPersonnelModal").modal("hide");
+        personnelTable.append(frag);
+
       } else {
-        alert("Error: " + result.status.description);
+        
+        $("#filterPersonnelForm .modal-title").replaceWith(
+        "Error: " + result.status.description
+      );
       }
     },
     error: function (jqXHR, textStatus, errorThrown) {
@@ -365,9 +672,129 @@ $("#filterPersonnelForm").on("submit",(e)=>{
         "Error retrieving data"
       );
     }
+
+  });
+  
+});
+
+$("#filterPersonnelLocation").on("change",(e)=>{
+
+  document.getElementById("searchInp").value = "";
+
+  locID = $("#filterPersonnelLocation").val();
+  $("#filterPersonnelDepartment").val("");
+  deptID="";
+
+  $.ajax({
+    url: "library/php/getPersonnelFilteredByLoc.php",
+    type: "POST",
+    dataType: "json",
+    data: {
+      locationID: locID
+    },
+    success: function(result) {
+
+      if (result.status.code == 200) {
+        
+        const personnelTable = document.getElementById("personnelTableBody");
+        personnelTable.innerHTML = "";
+
+        const frag = document.createDocumentFragment();
+
+        if(result.data.length > 0){
+
+          $.each(result.data, function () {
+
+            let row = document.createElement("tr");
+
+            let nameCell = document.createElement("td");
+            nameCell.classList.add("align-middle");
+            nameCell.textContent = `${this.lastName}, ${this.firstName}`;
+            row.append(nameCell);
+
+            let titleCell = document.createElement("td");
+            titleCell.classList.add("align-middle");
+            titleCell.textContent = this.jobTitle;
+            row.append(titleCell);
+
+            let departmentCell = document.createElement("td");
+            departmentCell.classList.add("align-middle");
+            departmentCell.textContent = this.department;
+            row.append(departmentCell);
+
+            let locationCell = document.createElement("td");
+            locationCell.classList.add("align-middle");
+            locationCell.textContent = this.location;
+            row.append(locationCell);
+
+            let emailCell = document.createElement("td");
+            emailCell.classList.add("align-middle");
+            emailCell.textContent = this.email;
+            row.append(emailCell);
+
+            let actionCell = document.createElement("td");
+            actionCell.classList.add("text-end");
+
+            const editButtn = document.createElement("button");
+            editButtn.type = "button";
+            editButtn.className = "btn btn-primary btn-sm";
+            editButtn.setAttribute("data-bs-toggle", "modal");
+            editButtn.setAttribute("data-bs-target", "#editPersonnelModal");
+            editButtn.setAttribute("data-id", this.id);
+            editButtn.innerHTML= '<i class="fa-solid fa-pencil"></i>';
+
+            const deleteBttn = document.createElement("button");
+            deleteBttn.type = "button";
+            deleteBttn.className = "btn btn-primary btn-sm";
+            deleteBttn.setAttribute("data-bs-toggle", "modal");
+            deleteBttn.setAttribute("data-bs-target", "#deletePersonnelModal");
+            deleteBttn.setAttribute("data-id", this.id);
+            deleteBttn.innerHTML = '<i class="fa-solid fa-trash fa-fw"></i>';
+
+            actionCell.append(editButtn, " ", deleteBttn);
+            row.append(actionCell);
+
+            frag.append(row);
+          });
+
+        }else{
+
+          let row = document.createElement("tr");
+          let notFoundCell = document.createElement("td");
+          notFoundCell.setAttribute("colspan", "7");
+          notFoundCell.className = "text-center";
+          notFoundCell.textContent = "No results found";
+
+          row.append(notFoundCell);
+          frag.append(row);
+
+        }
+        
+        personnelTable.append(frag);
+
+      } else {
+        
+        $("#filterPersonnelForm .modal-title").replaceWith(
+        "Error: " + result.status.description
+      );
+      }
+    },
+    error: function (jqXHR, textStatus, errorThrown) {
+      $("#filterPersonnelForm .modal-title").replaceWith(
+        "Error retrieving data"
+      );
+    }
+
   });
 
+});
+
+$("#filterPersonnelModal").on("hide.bs.modal", ()=>{
+
+  toogleFilterBtnActive();
+  
 })
+
 
 
 // add button
@@ -413,7 +840,9 @@ $("#addPersonnelModal").on("show.bs.modal",()=>{
         });
 
       }else{
-        alert("Error: " + result.status.description);
+        $("#addPersonnelModal .modal-title").replaceWith(
+        "Error: " + result.status.description
+      );
       }
     },
     error: function (jqXHR, textStatus, errorThrown) {
@@ -449,7 +878,7 @@ $("#addDepartmentModal").on("show.bs.modal", ()=>{
         });
 
       }else{
-        alert("Error: " + result.status.description);
+        $("#addDepartmentModal .modal-title").replaceWith("Error: " + result.status.description);
       }
     },
     error: function (jqXHR, textStatus, errorThrown) {
@@ -496,11 +925,21 @@ $("#addPersonnelForm").on("submit",(e)=>{
     success: function(result){
 
       if(result.status.code == 200){
-        alert("Personnel added Sucessfully");
+
+        let messageModal = new bootstrap.Modal(document.getElementById("messageModal"));
+        document.querySelector("#messageModal .modal-title").innerHTML = "SUCCESS:";
+        document.getElementById("messageModalMessage").innerHTML = "Personnel added Sucessfully.";
+        messageModal.show();
+
         loadPersonnel();
         $("#addPersonnelModal").modal("hide");
+
       }else{
-        alert("Error: "+ result.status.description);
+
+        let messageModal = new bootstrap.Modal(document.getElementById("messageModal"));
+        document.querySelector("#messageModal .modal-title").innerHTML = "ERROR:";
+        document.getElementById("messageModalMessage").innerHTML = "Error: "+ result.status.description;
+        messageModal.show();
       }
 
     },
@@ -531,11 +970,20 @@ $("#addDepartmentForm").on("submit",(e)=>{
     success: function(result){
 
       if(result.status.code == 200){
-        alert("Deapartment added Sucessfully");
+
+        let messageModal = new bootstrap.Modal(document.getElementById("messageModal"));
+        document.querySelector("#messageModal .modal-title").innerHTML = "SUCCESS:";
+        document.getElementById("messageModalMessage").innerHTML = "Department added Sucessfully.";
+        messageModal.show();
+
         loadDepartment();
         $("#addDepartmentModal").modal("hide");
       }else{
-        alert("Error: "+ result.status.description);
+        $("#addDepartmentModal").modal("hide");
+        let messageModal = new bootstrap.Modal(document.getElementById("messageModal"));
+        document.querySelector("#messageModal .modal-title").innerHTML = "ERROR:";
+        document.getElementById("messageModalMessage").innerHTML = "Error: "+ result.status.description;
+        messageModal.show();
       }
 
     },
@@ -562,11 +1010,23 @@ $("#addLocationForm").on("submit",(e)=>{
     success: function(result){
 
       if(result.status.code == 200){
-        alert("Location added Sucessfully");
+
+        let messageModal = new bootstrap.Modal(document.getElementById("messageModal"));
+        document.querySelector("#messageModal .modal-title").innerHTML = "SUCCESS:";
+        document.getElementById("messageModalMessage").innerHTML = "Location Added Sucessfully.";
+        messageModal.show();
+
+
         loadLocations();
         $("#addLocationModal").modal("hide");
       }else{
-        alert("Error: "+ result.status.description);
+
+        $("#addLocationModal").modal("hide");
+
+        let messageModal = new bootstrap.Modal(document.getElementById("messageModal"));
+        document.querySelector("#messageModal .modal-title").innerHTML = "ERROR:";
+        document.getElementById("messageModalMessage").innerHTML = "Error: "+ result.status.description;
+        messageModal.show();
       }
 
     },
@@ -581,38 +1041,45 @@ $("#addLocationForm").on("submit",(e)=>{
 
 
 
-
-$("#personnelBtn").click(function () {
-  
-  // Call function to refresh personnel table
-
-  loadPersonnel();
-  
-});
-
-$("#departmentsBtn").click(function () {
-  
-  // Call function to refresh department table
-
-  loadDepartment();
-  
-});
-
-$("#locationsBtn").click(function () {
-  
-  // Call function to refresh location table
-  
-  loadLocations();
-  
-});
-
-
-
 // Handler Groups to Delete Personnel Details
 // handler to store id
 $("#deletePersonnelModal").on("show.bs.modal",function (e){
   let id = $(e.relatedTarget).attr("data-id"); 
-  $("#deletePersonnelID").val(id);
+  let modalMessage = document.getElementById("deletePersonnelModalMessage");
+
+  $.ajax({
+    url:"library/php/getPersonnelByID.php",
+    type:"post",
+    dataType: "json",
+    data: {id:id},
+    success: function(result){
+      if(result.status.code == 200){
+        
+        let name = `${result.data.personnel[0].firstName} ${result.data.personnel[0].lastName}`;
+        modalMessage.innerHTML = `<p>Are you sure to remove the entry for <strong>${name}</strong></p>`;
+        document.getElementById("delPersConfirm").disabled = false;
+        document.getElementById("delPersReject").disabled = false;
+        $("#deletePersonnelID").val(id);
+
+
+      }else{
+        document.querySelector("#deletePersonnelModal .modal-title").textContent = "ERROR:";
+        modalMessage.innerHTML = "<p>Error retreiving data</p>";
+        document.getElementById("delPersConfirm").disabled = true;
+        document.getElementById("delPersReject").disabled = true;
+
+      }
+    },
+    error: function (xhr, status, error) {
+      console.error("AJAX Error:", status, error);
+      document.querySelector("#deletePersonnelModal .modal-title").textContent = "Error";
+      modalMessage.innerHTML = "<p>Error retreiving data</p>";
+      document.getElementById("delPersConfirm").disabled = true;
+      document.getElementById("delPersReject").disabled = true;
+    }
+  });
+
+  
 });
 
 // handler for deleting
@@ -620,6 +1087,7 @@ $("#deletePersonnelForm").on("submit",(e)=>{
   e.preventDefault();
 
   let id = $("#deletePersonnelID").val();
+  let modalMessage = document.getElementById("deletePersonnelModalMessage");
 
   $.ajax({
     url:"library/php/deletePersonnelByID.php",
@@ -633,14 +1101,23 @@ $("#deletePersonnelForm").on("submit",(e)=>{
         $("#deletePersonnelModal").modal("hide");
         loadPersonnel();
       }else{
-        alert("Error: " + result.status.description);
+
+        $("#deletePersonnelModal").modal("hide");
+
+        let messageModal = new bootstrap.Modal(document.getElementById("messageModal"));
+        document.querySelector("#messageModal .modal-title").innerHTML = "ERROR:";
+        document.getElementById("messageModalMessage").innerHTML = "Error deleting personnel data: "+ result.status.description;
+        messageModal.show();
       }
 
     },
     error: function (jqXHR, textStatus, errorThrown) {
-      $("#DeletePersonnelModal .modal-title").replaceWith(
-        "Error retrieving data"
-      );
+      $("#deletePersonnelModal").modal("hide");
+
+      let messageModal = new bootstrap.Modal(document.getElementById("messageModal"));
+      document.querySelector("#messageModal .modal-title").innerHTML = "ERROR:";
+      document.getElementById("messageModalMessage").innerHTML = "Error deleting personnel data.";
+      messageModal.show();
     }
   });
 });
@@ -655,8 +1132,45 @@ $('#deletePersonnelModal').on('hidden.bs.modal', function () {
 // Handler Groups to Delete Department Details
 // handler to store id
 $("#deleteDepartmentModal").on("show.bs.modal",function (e){
+
   let id = $(e.relatedTarget).attr("data-id"); 
-  $("#deleteDepartmentID").val(id);
+  let modalMessage = document.getElementById("deleteDepartmentModalMessage");
+
+  $.ajax({
+    url: "library/php/getDepartmentEntryCountByID.php",
+    type: "post",
+    dataType: "json",
+    data: {id:id},
+    success: function(result){
+
+      if(result.status.code == 200){
+        if(result.data.count > 0){
+          modalMessage.innerHTML = `<p>Cannot delete <strong>${result.data.department[0].name}</strong> as it has <strong>${result.data.count}</strong> entries in personnel table.</p>`;
+          document.getElementById("delDeprtConfirm").disabled = true;
+          document.getElementById("delDeprtReject").disabled = true;
+        }else{
+          modalMessage.innerHTML = `<p>Are you sure to remove the entry for <strong>${result.data.department[0].name}</strong></p>`;
+          document.getElementById("delDeprtConfirm").disabled = false;
+          document.getElementById("delDeprtReject").disabled = false;
+          $("#deleteDepartmentID").val(id);
+        }
+      }else{
+        document.querySelector("#deleteDepartmentModal .modal-title").textContent = "ERROR:";
+        modalMessage.innerHTML = "<p>Error retreiving data!</p>";
+        document.getElementById("delDeprtConfirm").disabled = true;
+        document.getElementById("delDeprtReject").disabled = true;
+      }
+
+    },
+    error: function (xhr, status, error) {
+      console.error("AJAX Error:", status, error);
+      document.querySelector("#deleteDepartmentModal .modal-title").textContent = "ERROR:";
+      modalMessage.innerHTML = "<p>Error retreiving data!</p>";
+      document.getElementById("delDeprtConfirm").disabled = true;
+      document.getElementById("delDeprtReject").disabled = true;
+    }
+  });
+
 });
 
 // handler for deleting 
@@ -664,7 +1178,8 @@ $("#deleteDepartmentForm").on("submit",(e)=>{
   e.preventDefault();
 
   let id= $("#deleteDepartmentID").val();
-
+  let modalMessage = document.getElementById("deleteDepartmentModalMessage");
+  
   $.ajax({
     url:"library/php/deleteDepartmentByID.php",
     type:"POST",
@@ -672,23 +1187,24 @@ $("#deleteDepartmentForm").on("submit",(e)=>{
     data:{id: id},
     success: function(result){
 
-      if(result.status.code == 409){
-        alert("Cannot delete: Department still assigned to personnel");
-        $("#deleteDepartmentModal").modal("hide");
-      }
-      else if(result.status.code == 200){
+      if(result.status.code == 200){
 
         $("#deleteDepartmentModal").modal("hide");
         loadDepartment();
       }else{
-        alert("Error: " + result.status.description);
+        let messageModal = new bootstrap.Modal(document.getElementById("messageModal"));
+        document.querySelector("#messageModal .modal-title").innerHTML = "ERROR:";
+        document.getElementById("messageModalMessage").innerHTML = "Error deleting department data: "+ result.status.description;
+        messageModal.show();
       }
 
     },
-    error: function (jqXHR, textStatus, errorThrown) {
-      $("#deleteDepartmentModal .modal-title").replaceWith(
-        "Error retrieving data"
-      );
+    error: function (jqXHR, textStatus, error) {
+      console.error("AJAX Error:", textStatus, error);
+      let messageModal = new bootstrap.Modal(document.getElementById("messageModal"));
+        document.querySelector("#messageModal .modal-title").innerHTML = "ERROR:";
+        document.getElementById("messageModalMessage").innerHTML = "Error deleting department data!";
+        messageModal.show();
     }
   });
 });
@@ -703,8 +1219,45 @@ $('#deleteDepartmentModal').on('hidden.bs.modal', function () {
 // Handler Groups to Delete Location Details
 // handler to store id
 $("#deleteLocationModal").on("show.bs.modal",function (e){
+
   let id = $(e.relatedTarget).attr("data-id"); 
-  $("#deleteLocationID").val(id);
+  let modalMessage = document.getElementById("deleteLocationModalMessage");
+
+  $.ajax({
+    url: "library/php/getLocationEntryCountByID.php",
+    type: "post",
+    dataType: "json",
+    data: {id:id},
+    success: function(result){
+
+      if(result.status.code == 200){
+        if(result.data.count > 0){
+          modalMessage.innerHTML = `<p>Cannot delete <strong>${result.data.location[0].name}</strong> as it has <strong>${result.data.count}</strong> entries in department table.</p>`;
+          document.getElementById("delLocConfirm").disabled = true;
+          document.getElementById("delLocReject").disabled = true;
+        }else{
+          modalMessage.innerHTML = `<p>Are you sure to remove the entry for <strong>${result.data.location[0].name}</strong></p>`;
+          document.getElementById("delLocConfirm").disabled = false;
+          document.getElementById("delLocReject").disabled = false;
+          $("#deleteLocationID").val(id);
+        }
+      }else{
+        document.querySelector("#deleteLocationModal .modal-title").textContent = "ERROR:";
+        modalMessage.innerHTML = "<p>Error retreiving data!</p>";
+        document.getElementById("delLocConfirm").disabled = true;
+        document.getElementById("delLocReject").disabled = true;
+      }
+
+    },
+    error: function (xhr, status, error) {
+      console.error("AJAX Error:", status, error);
+      document.querySelector("#deleteLocationModal .modal-title").textContent = "ERROR:";
+      modalMessage.innerHTML = "<p>Error retreiving data!</p>";
+      document.getElementById("delLocConfirm").disabled = true;
+      document.getElementById("delLocReject").disabled = true;
+    }
+  });
+
 });
 
 // handler for deleting 
@@ -720,22 +1273,24 @@ $("#deleteLocationForm").on("submit",(e)=>{
     data:{id: id},
     success: function(result){
 
-      if(result.status.code == 409){
-        alert("Cannot delete: Location still assigned to department or personnel")
-        $("#deleteLocationModal").modal("hide");
-      }else if(result.status.code == 200){
+      if(result.status.code == 200){
         
         $("#deleteLocationModal").modal("hide");
         loadLocations();
       }else{
-        alert("Error: " + result.status.description);
+        let messageModal = new bootstrap.Modal(document.getElementById("messageModal"));
+        document.querySelector("#messageModal .modal-title").innerHTML = "ERROR:";
+        document.getElementById("messageModalMessage").innerHTML = "Error deleting Location: "+ result.status.description;
+        messageModal.show();
       }
 
     },
-    error: function (jqXHR, textStatus, errorThrown) {
-      $("#deleteLocationModal .modal-title").replaceWith(
-        "Error retrieving data"
-      );
+    error: function (jqXHR, status, error) {
+      console.error("AJAX Error:", status, error);
+      let messageModal = new bootstrap.Modal(document.getElementById("messageModal"));
+      document.querySelector("#messageModal .modal-title").innerHTML = "ERROR:";
+      document.getElementById("messageModalMessage").innerHTML = "Error deleting Location!";
+      messageModal.show();
     }
   });
 });
@@ -827,7 +1382,12 @@ $("#editPersonnelForm").on("submit", function (e) {
 
       if(result.status.code == 200){
         $("#editPersonnelModal").modal("hide");
-        alert("Personnel details updated successfully");
+
+        let messageModal = new bootstrap.Modal(document.getElementById("messageModal"));
+        document.querySelector("#messageModal .modal-title").innerHTML = "SUCCESS:";
+        document.getElementById("messageModalMessage").innerHTML = "Personnel details updated successfully.";
+        messageModal.show();
+
         loadPersonnel();
       }
     },
@@ -917,7 +1477,12 @@ $("#editDepartmentModal").on("submit",(e)=>{
 
       if(result.status.code == 200){
         $("#editDepartmentModal").modal("hide");
-        alert("Department details updated successfully");
+
+        let messageModal = new bootstrap.Modal(document.getElementById("messageModal"));
+        document.querySelector("#messageModal .modal-title").innerHTML = "SUCCESS:";
+        document.getElementById("messageModalMessage").innerHTML = "Department details updated sucessfully.";
+        messageModal.show();
+
         loadDepartment();
 
       }else{
@@ -996,7 +1561,12 @@ $("#editLocationModal").on("submit",(e)=>{
 
       if(result.status.code == 200){
         $("#editLocationModal").modal("hide");
-        alert("Location details updated successfully");
+
+        let messageModal = new bootstrap.Modal(document.getElementById("messageModal"));
+        document.querySelector("#messageModal .modal-title").innerHTML = "SUCCESS:";
+        document.getElementById("messageModalMessage").innerHTML = "Location details updated sucessfully.";
+        messageModal.show();
+
         loadLocations();
         
       }else{
@@ -1016,4 +1586,10 @@ $("#editLocationModal").on("submit",(e)=>{
 // handler to shift focus
 $('#editLocationModal').on('hidden.bs.modal', function () {
   $('#locationsBtn').trigger('focus');
+});
+
+
+//handler to shift focus 
+$('#messageModal').on('hidden.bs.modal', function () {
+  $('#refreshBtn').trigger('focus');
 });
