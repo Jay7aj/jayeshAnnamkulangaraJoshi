@@ -287,6 +287,7 @@ $(document).ready(()=>{
     loadPersonnel();
     loadDepartment();
     loadLocations();
+   
 })
 
 
@@ -1412,7 +1413,7 @@ $('#editPersonnelModal').on('hidden.bs.modal', function () {
 
 // handler to load modal for edit department
 $("#editDepartmentModal").on("show.bs.modal", (e)=>{
-  
+
   $.ajax({
     url:  "library/php/getDepartmentByID.php",
     type: "POST",
@@ -1424,6 +1425,7 @@ $("#editDepartmentModal").on("show.bs.modal", (e)=>{
       id: $(e.relatedTarget).attr("data-id") 
     },
     success: function (result) {
+  
       var resultCode = result.status.code;
 
       if (resultCode == 200) {
@@ -1511,7 +1513,7 @@ $('#editDepartmentModal').on('hidden.bs.modal', function () {
 
 // handler to load modal for edit location
 $("#editLocationModal").on("show.bs.modal", (e)=>{
-  
+
   $.ajax({
     url:  "library/php/getLocationByID.php",
     type: "POST",

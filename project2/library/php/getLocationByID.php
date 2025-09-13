@@ -29,7 +29,7 @@
 
 	// SQL statement accepts parameters and so is prepared to avoid SQL injection.
 
-	$query = $conn->prepare('SELECT id, name FROM location WHERE id = ? orderby location');
+	$query = $conn->prepare('SELECT id, name FROM location WHERE id = ? ORDER BY name');
 
 	$query->bind_param("i", $_POST['id']);
 

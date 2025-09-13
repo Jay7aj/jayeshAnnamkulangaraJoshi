@@ -60,7 +60,7 @@
 	}
 
 	// second query
-	$query = 'SELECT id, name from Location ORDER BY name';
+	$query = 'SELECT id, name from location ORDER BY name';
 
 	$result = $conn->query($query);
 	
