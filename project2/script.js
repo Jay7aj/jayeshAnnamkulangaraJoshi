@@ -410,6 +410,9 @@ $("#refreshBtn").click(function () {
   if ($("#personnelBtn").hasClass("active")) {
  
     loadPersonnel();
+    deptID="";
+    locID="";
+    toogleFilterBtnActive();
     
   } else {
     
