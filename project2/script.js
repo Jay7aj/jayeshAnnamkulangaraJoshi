@@ -21,32 +21,32 @@ function loadPersonnel() {
           let row = document.createElement("tr");
 
           let nameCell = document.createElement("td");
-          nameCell.classList.add("align-middle");
+          nameCell.classList.add("align-middle", "text-nowrap");
           nameCell.textContent = `${this.lastName}, ${this.firstName}`;
           row.append(nameCell);
 
           let titleCell = document.createElement("td");
-          titleCell.classList.add("align-middle");
+          titleCell.classList.add("align-middle", "text-nowrap", "d-none", "d-md-table-cell");
           titleCell.textContent = this.jobTitle;
           row.append(titleCell);
 
           let departmentCell = document.createElement("td");
-          departmentCell.classList.add("align-middle");
+          departmentCell.classList.add("align-middle", "text-nowrap", "d-none", "d-md-table-cell");
           departmentCell.textContent = this.department;
           row.append(departmentCell);
 
           let locationCell = document.createElement("td");
-          locationCell.classList.add("align-middle");
+          locationCell.classList.add("align-middle", "text-nowrap", "d-none", "d-md-table-cell");
           locationCell.textContent = this.location;
           row.append(locationCell);
 
           let emailCell = document.createElement("td");
-          emailCell.classList.add("align-middle");
+          emailCell.classList.add("align-middle", "text-nowrap", "d-none", "d-md-table-cell");
           emailCell.textContent = this.email;
           row.append(emailCell);
 
           let actionCell = document.createElement("td");
-          actionCell.classList.add("text-end");
+          actionCell.classList.add("text-end", "text-nowrap");
 
           const editButtn = document.createElement("button");
           editButtn.type = "button";
@@ -74,6 +74,7 @@ function loadPersonnel() {
         personnelTable.append(frag);
 
       } else {
+
         let messageModal = new bootstrap.Modal(document.getElementById("messageModal"));
         document.querySelector("#messageModal .modal-title").innerHTML = "ERROR:";
         document.getElementById("messageModalMessage").innerHTML = "Error: "+ result.status.description;
@@ -327,32 +328,32 @@ $("#searchInp").on("keyup", function () {
               let row = document.createElement("tr");
 
               let nameCell = document.createElement("td");
-              nameCell.classList.add("align-middle");
+              nameCell.classList.add("align-middle", "text-nowrap");
               nameCell.textContent = `${this.lastName}, ${this.firstName}`;
               row.append(nameCell);
 
               let titleCell = document.createElement("td");
-              titleCell.classList.add("align-middle");
+              titleCell.classList.add("align-middle", "text-nowrap", "d-none", "d-md-table-cell");
               titleCell.textContent = this.jobTitle;
               row.append(titleCell);
 
               let departmentCell = document.createElement("td");
-              departmentCell.classList.add("align-middle");
+              departmentCell.classList.add("align-middle", "text-nowrap", "d-none", "d-md-table-cell");
               departmentCell.textContent = this.departmentName;
               row.append(departmentCell);
 
               let locationCell = document.createElement("td");
-              locationCell.classList.add("align-middle");
+              locationCell.classList.add("align-middle", "text-nowrap", "d-none", "d-md-table-cell");
               locationCell.textContent = this.locationName;
               row.append(locationCell);
 
               let emailCell = document.createElement("td");
-              emailCell.classList.add("align-middle");
+              emailCell.classList.add("align-middle", "text-nowrap", "d-none", "d-md-table-cell");
               emailCell.textContent = this.email;
               row.append(emailCell);
 
               let actionCell = document.createElement("td");
-              actionCell.classList.add("text-end");
+              actionCell.classList.add("text-end", "text-nowrap");
 
               const editButtn = document.createElement("button");
               editButtn.type = "button";
@@ -600,32 +601,32 @@ $("#filterPersonnelDepartment").on("change",(e)=>{
             let row = document.createElement("tr");
 
             let nameCell = document.createElement("td");
-            nameCell.classList.add("align-middle");
+            nameCell.classList.add("align-middle", "text-nowrap");
             nameCell.textContent = `${this.lastName}, ${this.firstName}`;
             row.append(nameCell);
 
             let titleCell = document.createElement("td");
-            titleCell.classList.add("align-middle");
+            titleCell.classList.add("align-middle", "text-nowrap", "d-none", "d-md-table-cell");
             titleCell.textContent = this.jobTitle;
             row.append(titleCell);
 
             let departmentCell = document.createElement("td");
-            departmentCell.classList.add("align-middle");
+            departmentCell.classList.add("align-middle", "text-nowrap", "d-none", "d-md-table-cell");
             departmentCell.textContent = this.department;
             row.append(departmentCell);
 
             let locationCell = document.createElement("td");
-            locationCell.classList.add("align-middle");
+            locationCell.classList.add("align-middle", "text-nowrap", "d-none", "d-md-table-cell");
             locationCell.textContent = this.location;
             row.append(locationCell);
 
             let emailCell = document.createElement("td");
-            emailCell.classList.add("align-middle");
+            emailCell.classList.add("align-middle", "text-nowrap", "d-none", "d-md-table-cell");
             emailCell.textContent = this.email;
             row.append(emailCell);
 
             let actionCell = document.createElement("td");
-            actionCell.classList.add("text-end");
+            actionCell.classList.add("text-end", "text-nowrap");
 
             const editButtn = document.createElement("button");
             editButtn.type = "button";
@@ -712,32 +713,32 @@ $("#filterPersonnelLocation").on("change",(e)=>{
             let row = document.createElement("tr");
 
             let nameCell = document.createElement("td");
-            nameCell.classList.add("align-middle");
+            nameCell.classList.add("align-middle", "text-nowrap");
             nameCell.textContent = `${this.lastName}, ${this.firstName}`;
             row.append(nameCell);
 
             let titleCell = document.createElement("td");
-            titleCell.classList.add("align-middle");
+            titleCell.classList.add("align-middle", "text-nowrap", "d-none", "d-md-table-cell");
             titleCell.textContent = this.jobTitle;
             row.append(titleCell);
 
             let departmentCell = document.createElement("td");
-            departmentCell.classList.add("align-middle");
+            departmentCell.classList.add("align-middle", "text-nowrap", "d-none", "d-md-table-cell");
             departmentCell.textContent = this.department;
             row.append(departmentCell);
 
             let locationCell = document.createElement("td");
-            locationCell.classList.add("align-middle");
+            locationCell.classList.add("align-middle", "text-nowrap", "d-none", "d-md-table-cell");
             locationCell.textContent = this.location;
             row.append(locationCell);
 
             let emailCell = document.createElement("td");
-            emailCell.classList.add("align-middle");
+            emailCell.classList.add("align-middle", "text-nowrap", "d-none", "d-md-table-cell");
             emailCell.textContent = this.email;
             row.append(emailCell);
 
             let actionCell = document.createElement("td");
-            actionCell.classList.add("text-end");
+            actionCell.classList.add("text-end", "text-nowrap");
 
             const editButtn = document.createElement("button");
             editButtn.type = "button";
@@ -930,20 +931,18 @@ $("#addPersonnelForm").on("submit",(e)=>{
 
       if(result.status.code == 200){
 
-        let messageModal = new bootstrap.Modal(document.getElementById("messageModal"));
-        document.querySelector("#messageModal .modal-title").innerHTML = "SUCCESS:";
-        document.getElementById("messageModalMessage").innerHTML = "Personnel added Sucessfully.";
-        messageModal.show();
-
         loadPersonnel();
         $("#addPersonnelModal").modal("hide");
 
       }else{
 
+        $("#addPersonnelModal").modal("hide");
+
         let messageModal = new bootstrap.Modal(document.getElementById("messageModal"));
         document.querySelector("#messageModal .modal-title").innerHTML = "ERROR:";
         document.getElementById("messageModalMessage").innerHTML = "Error: "+ result.status.description;
         messageModal.show();
+
       }
 
     },
@@ -975,15 +974,13 @@ $("#addDepartmentForm").on("submit",(e)=>{
 
       if(result.status.code == 200){
 
-        let messageModal = new bootstrap.Modal(document.getElementById("messageModal"));
-        document.querySelector("#messageModal .modal-title").innerHTML = "SUCCESS:";
-        document.getElementById("messageModalMessage").innerHTML = "Department added Sucessfully.";
-        messageModal.show();
-
         loadDepartment();
         $("#addDepartmentModal").modal("hide");
+
       }else{
+
         $("#addDepartmentModal").modal("hide");
+
         let messageModal = new bootstrap.Modal(document.getElementById("messageModal"));
         document.querySelector("#messageModal .modal-title").innerHTML = "ERROR:";
         document.getElementById("messageModalMessage").innerHTML = "Error: "+ result.status.description;
@@ -992,6 +989,7 @@ $("#addDepartmentForm").on("submit",(e)=>{
 
     },
     error: function (jqXHR, textStatus, errorThrown) {
+
       $("#addDepartmentModal .modal-title").replaceWith(
         "Error adding department"
       );
@@ -1015,14 +1013,9 @@ $("#addLocationForm").on("submit",(e)=>{
 
       if(result.status.code == 200){
 
-        let messageModal = new bootstrap.Modal(document.getElementById("messageModal"));
-        document.querySelector("#messageModal .modal-title").innerHTML = "SUCCESS:";
-        document.getElementById("messageModalMessage").innerHTML = "Location Added Sucessfully.";
-        messageModal.show();
-
-
         loadLocations();
         $("#addLocationModal").modal("hide");
+
       }else{
 
         $("#addLocationModal").modal("hide");
@@ -1030,7 +1023,9 @@ $("#addLocationForm").on("submit",(e)=>{
         let messageModal = new bootstrap.Modal(document.getElementById("messageModal"));
         document.querySelector("#messageModal .modal-title").innerHTML = "ERROR:";
         document.getElementById("messageModalMessage").innerHTML = "Error: "+ result.status.description;
+
         messageModal.show();
+
       }
 
     },
@@ -1149,20 +1144,25 @@ $("#deleteDepartmentModal").on("show.bs.modal",function (e){
 
       if(result.status.code == 200){
         if(result.data.count > 0){
+          document.querySelector("#deleteDepartmentModal .modal-title").textContent = "Cannot Delete Department...";
           modalMessage.innerHTML = `<p>Cannot delete <strong>${result.data.department[0].name}</strong> as it has <strong>${result.data.count}</strong> entries in personnel table.</p>`;
-          document.getElementById("delDeprtConfirm").disabled = true;
-          document.getElementById("delDeprtReject").disabled = true;
+          document.getElementById("delDeprtConfirm").classList.add("d-none");
+          document.getElementById("delDeprtReject").classList.add("d-none");
+          document.getElementById("delDeprtClose").classList.remove("d-none");
         }else{
+          document.querySelector("#deleteDepartmentModal .modal-title").textContent = "Delete Department";
           modalMessage.innerHTML = `<p>Are you sure to remove the entry for <strong>${result.data.department[0].name}</strong></p>`;
-          document.getElementById("delDeprtConfirm").disabled = false;
-          document.getElementById("delDeprtReject").disabled = false;
+          document.getElementById("delDeprtConfirm").classList.remove("d-none");
+          document.getElementById("delDeprtReject").classList.remove("d-none");
+          document.getElementById("delDeprtClose").classList.add("d-none");
           $("#deleteDepartmentID").val(id);
         }
       }else{
         document.querySelector("#deleteDepartmentModal .modal-title").textContent = "ERROR:";
         modalMessage.innerHTML = "<p>Error retreiving data!</p>";
-        document.getElementById("delDeprtConfirm").disabled = true;
-        document.getElementById("delDeprtReject").disabled = true;
+        document.getElementById("delDeprtConfirm").classList.add("d-none");
+        document.getElementById("delDeprtReject").classList.add("d-none");
+        document.getElementById("delDeprtClose").classList.remove("d-none");
       }
 
     },
@@ -1170,8 +1170,9 @@ $("#deleteDepartmentModal").on("show.bs.modal",function (e){
       console.error("AJAX Error:", status, error);
       document.querySelector("#deleteDepartmentModal .modal-title").textContent = "ERROR:";
       modalMessage.innerHTML = "<p>Error retreiving data!</p>";
-      document.getElementById("delDeprtConfirm").disabled = true;
-      document.getElementById("delDeprtReject").disabled = true;
+      document.getElementById("delDeprtConfirm").classList.add("d-none");
+      document.getElementById("delDeprtReject").classList.add("d-none");
+      document.getElementById("delDeprtClose").classList.remove("d-none");
     }
   });
 
@@ -1196,6 +1197,7 @@ $("#deleteDepartmentForm").on("submit",(e)=>{
         $("#deleteDepartmentModal").modal("hide");
         loadDepartment();
       }else{
+
         let messageModal = new bootstrap.Modal(document.getElementById("messageModal"));
         document.querySelector("#messageModal .modal-title").innerHTML = "ERROR:";
         document.getElementById("messageModalMessage").innerHTML = "Error deleting department data: "+ result.status.description;
@@ -1236,20 +1238,25 @@ $("#deleteLocationModal").on("show.bs.modal",function (e){
 
       if(result.status.code == 200){
         if(result.data.count > 0){
+          document.querySelector("#deleteLocationModal .modal-title").textContent = "Cannot Delete Location...";
           modalMessage.innerHTML = `<p>Cannot delete <strong>${result.data.location[0].name}</strong> as it has <strong>${result.data.count}</strong> entries in department table.</p>`;
-          document.getElementById("delLocConfirm").disabled = true;
-          document.getElementById("delLocReject").disabled = true;
+          document.getElementById("delLocConfirm").classList.add("d-none");
+          document.getElementById("delLocReject").classList.add("d-none");
+          document.getElementById("delLocClose").classList.remove("d-none");
         }else{
+          document.querySelector("#deleteLocationModal .modal-title").textContent = "Delete Location";
           modalMessage.innerHTML = `<p>Are you sure to remove the entry for <strong>${result.data.location[0].name}</strong></p>`;
-          document.getElementById("delLocConfirm").disabled = false;
-          document.getElementById("delLocReject").disabled = false;
+          document.getElementById("delLocConfirm").classList.remove("d-none");
+          document.getElementById("delLocReject").classList.remove("d-none");
+          document.getElementById("delLocClose").classList.add("d-none");
           $("#deleteLocationID").val(id);
         }
       }else{
         document.querySelector("#deleteLocationModal .modal-title").textContent = "ERROR:";
         modalMessage.innerHTML = "<p>Error retreiving data!</p>";
-        document.getElementById("delLocConfirm").disabled = true;
-        document.getElementById("delLocReject").disabled = true;
+        document.getElementById("delLocConfirm").classList.add("d-none");
+        document.getElementById("delLocReject").classList.add("d-none");
+        document.getElementById("delLocClose").classList.remove("d-none");
       }
 
     },
@@ -1257,8 +1264,9 @@ $("#deleteLocationModal").on("show.bs.modal",function (e){
       console.error("AJAX Error:", status, error);
       document.querySelector("#deleteLocationModal .modal-title").textContent = "ERROR:";
       modalMessage.innerHTML = "<p>Error retreiving data!</p>";
-      document.getElementById("delLocConfirm").disabled = true;
-      document.getElementById("delLocReject").disabled = true;
+      document.getElementById("delLocConfirm").classList.add("d-none");
+      document.getElementById("delLocReject").classList.add("d-none");
+      document.getElementById("delLocClose").classList.remove("d-none");
     }
   });
 
@@ -1281,20 +1289,25 @@ $("#deleteLocationForm").on("submit",(e)=>{
         
         $("#deleteLocationModal").modal("hide");
         loadLocations();
+
       }else{
+
         let messageModal = new bootstrap.Modal(document.getElementById("messageModal"));
         document.querySelector("#messageModal .modal-title").innerHTML = "ERROR:";
         document.getElementById("messageModalMessage").innerHTML = "Error deleting Location: "+ result.status.description;
         messageModal.show();
+
       }
 
     },
     error: function (jqXHR, status, error) {
+
       console.error("AJAX Error:", status, error);
       let messageModal = new bootstrap.Modal(document.getElementById("messageModal"));
       document.querySelector("#messageModal .modal-title").innerHTML = "ERROR:";
       document.getElementById("messageModalMessage").innerHTML = "Error deleting Location!";
       messageModal.show();
+
     }
   });
 });
@@ -1387,12 +1400,8 @@ $("#editPersonnelForm").on("submit", function (e) {
       if(result.status.code == 200){
         $("#editPersonnelModal").modal("hide");
 
-        let messageModal = new bootstrap.Modal(document.getElementById("messageModal"));
-        document.querySelector("#messageModal .modal-title").innerHTML = "SUCCESS:";
-        document.getElementById("messageModalMessage").innerHTML = "Personnel details updated successfully.";
-        messageModal.show();
-
         loadPersonnel();
+
       }
     },
     error: function (jqXHR, textStatus, errorThrown) {
@@ -1483,11 +1492,6 @@ $("#editDepartmentModal").on("submit",(e)=>{
       if(result.status.code == 200){
         $("#editDepartmentModal").modal("hide");
 
-        let messageModal = new bootstrap.Modal(document.getElementById("messageModal"));
-        document.querySelector("#messageModal .modal-title").innerHTML = "SUCCESS:";
-        document.getElementById("messageModalMessage").innerHTML = "Department details updated sucessfully.";
-        messageModal.show();
-
         loadDepartment();
 
       }else{
@@ -1567,11 +1571,6 @@ $("#editLocationModal").on("submit",(e)=>{
       if(result.status.code == 200){
         $("#editLocationModal").modal("hide");
 
-        let messageModal = new bootstrap.Modal(document.getElementById("messageModal"));
-        document.querySelector("#messageModal .modal-title").innerHTML = "SUCCESS:";
-        document.getElementById("messageModalMessage").innerHTML = "Location details updated sucessfully.";
-        messageModal.show();
-
         loadLocations();
         
       }else{
@@ -1594,7 +1593,3 @@ $('#editLocationModal').on('hidden.bs.modal', function () {
 });
 
 
-//handler to shift focus 
-$('#messageModal').on('hidden.bs.modal', function () {
-  $('#refreshBtn').trigger('focus');
-});

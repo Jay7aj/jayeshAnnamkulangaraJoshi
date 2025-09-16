@@ -159,7 +159,7 @@
                         </div>
 
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="editPersonnelJobTitle" placeholder="Job Title">
+                            <input type="text" class="form-control" id="editPersonnelJobTitle" placeholder="Job Title" required>
                             <label for="editPersonnelJobTitle">Job Title</label>
                         </div>          
 
@@ -356,7 +356,7 @@
                         </div>
 
                         <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="addPersonnelJobTitle" name="jobTitle" placeholder="Job Title">
+                            <input type="text" class="form-control" id="addPersonnelJobTitle" name="jobTitle" placeholder="Job Title" required>
                             <label for="addPersonnelJobTitle">Job Title</label>
                         </div>          
 
@@ -546,6 +546,7 @@
                 <div class="modal-footer">
                     <button type="submit" id="delDeprtConfirm" form="deleteDepartmentForm" class="btn btn-outline-primary btn-sm myBtn">Yes</button>
                     <button type="button" id="delDeprtReject" class="btn btn-outline-primary btn-sm myBtn" data-bs-dismiss="modal">NO</button>
+                    <button type="button" id="delDeprtClose" class="btn btn-outline-primary btn-sm myBtn d-none" data-bs-dismiss="modal">OK</button>
                 </div>
         
             </div>
@@ -586,6 +587,7 @@
                 <div class="modal-footer">
                     <button id="delLocConfirm" type="submit" form="deleteLocationForm" class="btn btn-outline-primary btn-sm myBtn">YES</button>
                     <button id="delLocReject" type="button" class="btn btn-outline-primary btn-sm myBtn" data-bs-dismiss="modal">NO</button>
+                    <button id="delLocClose" type="button" class="btn btn-outline-primary btn-sm myBtn d-none" data-bs-dismiss="modal">OK</button>
                 </div>
         
             </div>
