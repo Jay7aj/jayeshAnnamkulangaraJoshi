@@ -1053,28 +1053,31 @@ $("#deletePersonnelModal").on("show.bs.modal",function (e){
     data: {id:id},
     success: function(result){
       if(result.status.code == 200){
-        
+        document.querySelector("#deletePersonnelModal .modal-title").textContent = "Delete Employ Entry";
         let name = `${result.data.personnel[0].firstName} ${result.data.personnel[0].lastName}`;
         modalMessage.innerHTML = `<p>Are you sure to remove the entry for <strong>${name}</strong></p>`;
-        document.getElementById("delPersConfirm").disabled = false;
-        document.getElementById("delPersReject").disabled = false;
+        document.getElementById("delPersConfirm").classList.remove("d-none");
+        document.getElementById("delPersReject").classList.remove("d-none");
+        document.getElementById("delPersClose").classList.add("d-none");
         $("#deletePersonnelID").val(id);
 
 
       }else{
         document.querySelector("#deletePersonnelModal .modal-title").textContent = "ERROR:";
         modalMessage.innerHTML = "<p>Error retreiving data</p>";
-        document.getElementById("delPersConfirm").disabled = true;
-        document.getElementById("delPersReject").disabled = true;
+        document.getElementById("delPersConfirm").classList.add("d-none");
+        document.getElementById("delPersReject").classList.add("d-none");
+        document.getElementById("delPersClose").classList.remove("d-none");
 
       }
     },
     error: function (xhr, status, error) {
       console.error("AJAX Error:", status, error);
-      document.querySelector("#deletePersonnelModal .modal-title").textContent = "Error";
+      document.querySelector("#deletePersonnelModal .modal-title").textContent = "ERROR:";
       modalMessage.innerHTML = "<p>Error retreiving data</p>";
-      document.getElementById("delPersConfirm").disabled = true;
-      document.getElementById("delPersReject").disabled = true;
+      document.getElementById("delPersConfirm").classList.add("d-none");
+      document.getElementById("delPersReject").classList.add("d-none");
+      document.getElementById("delPersClose").classList.remove("d-none");
     }
   });
 
