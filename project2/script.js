@@ -25,11 +25,6 @@ function loadPersonnel() {
           nameCell.textContent = `${this.lastName}, ${this.firstName}`;
           row.append(nameCell);
 
-          let titleCell = document.createElement("td");
-          titleCell.classList.add("align-middle", "text-nowrap", "d-none", "d-md-table-cell");
-          titleCell.textContent = this.jobTitle;
-          row.append(titleCell);
-
           let departmentCell = document.createElement("td");
           departmentCell.classList.add("align-middle", "text-nowrap", "d-none", "d-md-table-cell");
           departmentCell.textContent = this.department;
@@ -332,11 +327,6 @@ $("#searchInp").on("keyup", function () {
               nameCell.textContent = `${this.lastName}, ${this.firstName}`;
               row.append(nameCell);
 
-              let titleCell = document.createElement("td");
-              titleCell.classList.add("align-middle", "text-nowrap", "d-none", "d-md-table-cell");
-              titleCell.textContent = this.jobTitle;
-              row.append(titleCell);
-
               let departmentCell = document.createElement("td");
               departmentCell.classList.add("align-middle", "text-nowrap", "d-none", "d-md-table-cell");
               departmentCell.textContent = this.departmentName;
@@ -605,11 +595,6 @@ $("#filterPersonnelDepartment").on("change",(e)=>{
             nameCell.textContent = `${this.lastName}, ${this.firstName}`;
             row.append(nameCell);
 
-            let titleCell = document.createElement("td");
-            titleCell.classList.add("align-middle", "text-nowrap", "d-none", "d-md-table-cell");
-            titleCell.textContent = this.jobTitle;
-            row.append(titleCell);
-
             let departmentCell = document.createElement("td");
             departmentCell.classList.add("align-middle", "text-nowrap", "d-none", "d-md-table-cell");
             departmentCell.textContent = this.department;
@@ -716,11 +701,6 @@ $("#filterPersonnelLocation").on("change",(e)=>{
             nameCell.classList.add("align-middle", "text-nowrap");
             nameCell.textContent = `${this.lastName}, ${this.firstName}`;
             row.append(nameCell);
-
-            let titleCell = document.createElement("td");
-            titleCell.classList.add("align-middle", "text-nowrap", "d-none", "d-md-table-cell");
-            titleCell.textContent = this.jobTitle;
-            row.append(titleCell);
 
             let departmentCell = document.createElement("td");
             departmentCell.classList.add("align-middle", "text-nowrap", "d-none", "d-md-table-cell");
@@ -912,7 +892,6 @@ $("#addPersonnelForm").on("submit",(e)=>{
 
   let firstName= $("#addPersonnelFirstName").val();
   let lastName= $("#addPersonnelLastName").val();
-  let jobTitle= $("#addPersonnelJobTitle").val();
   let email= $("#addPersonnelEmail").val();
   let departmentID= $("#addPersonnelDepartment").val();
 
@@ -923,7 +902,6 @@ $("#addPersonnelForm").on("submit",(e)=>{
     data: {
       firstName: firstName,
       lastName: lastName,
-      jobTitle: jobTitle,
       email: email,
       departmentID: departmentID
     },
@@ -1347,7 +1325,6 @@ $("#editPersonnelModal").on("show.bs.modal", function (e) {
 
         $("#editPersonnelFirstName").val(result.data.personnel[0].firstName);
         $("#editPersonnelLastName").val(result.data.personnel[0].lastName);
-        $("#editPersonnelJobTitle").val(result.data.personnel[0].jobTitle);
         $("#editPersonnelEmailAddress").val(result.data.personnel[0].email);
 
         $("#editPersonnelDepartment").html("");
@@ -1394,7 +1371,6 @@ $("#editPersonnelForm").on("submit", function (e) {
       persID: $("#editPersonnelEmployeeID").val(),
       firstName: $("#editPersonnelFirstName").val(),
       lastName: $("#editPersonnelLastName").val(),
-      jobTitle: $("#editPersonnelJobTitle").val(),
       email: $("#editPersonnelEmailAddress").val(),
       deptID: $("#editPersonnelDepartment").val(),
      },
