@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Task Manager</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+    <div id="search-container">
+        <input type="text" id="search" placeholder="Search tasks..." oninput="setSearch(this.value)" />
+    </div>
+
+    <div id="filters">
+        <button onclick="setFilter('all')">All</button>
+        <button onclick="setFilter('completed')">Completed</button>
+        <button onclick="setFilter('pending')">Pending</button>
+    </div>
+
+    <div class="container">
+        <h1>Task Manager</h1>
+
+        <form id="taskForm">
+            <input type="text" id="title" placeholder="Task title" required />
+            <textarea id="description" placeholder="Task description"></textarea>
+            <button type="submit">Add Task</button>
+        </form>
+
+        <ul id="taskList"></ul>
+    </div>
+
+    <section>
+        <h2>Notes</h2>
+
+        <form id="noteForm">
+            <input type="text" id="noteTitle" placeholder="Note Title" required/>
+            <textarea id="noteContent" placeholder="Note content"></textarea>
+            <button type="submit">Save Note</button>
+        </form>
+        <ul id="noteList"></ul>
+
+    </section>
+
+    <button id="logoutBtn">Logout</button>
+
+
+    <script src="script.js" defer></script>
+</body>
+</html>
