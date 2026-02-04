@@ -79,7 +79,17 @@ CREATE INDEX idx_issues_status ON issues(status);
 CREATE INDEX idx_issues_priority ON issues(priority);
 CREATE INDEX idx_issues_assigned_to ON issues(assigned_to);
 CREATE INDEX idx_issues_created_by ON issues(created_by);
+CREATE INDEX idx_issues_created_at ON issues(created_at DESC);
+CREATE INDEX idx_issues_updated_at ON issues(updated_at DESC);
+
 CREATE INDEX idx_comments_issue_id ON comments(issue_id);
+CREATE INDEX idx_comments_author_id ON comments(author_id);
+CREATE INDEX idx_comments_created_at ON comments(created_at DESC);
+
+-- Text search (ILIKE)
+CREATE EXTENSION IF NOT EXISTS pg_trgm;
+CREATE INDEX idx_issues_title_desc_trgm
+ON issues USING gin ((title || ' ' || description) gin_trgm_ops);
 
 -- =========================
 -- Updated-at Trigger
@@ -101,6 +111,7 @@ CREATE TRIGGER trg_issues_updated
 BEFORE UPDATE ON issues
 FOR EACH ROW
 EXECUTE FUNCTION set_updated_at();
+
 
 CREATE TRIGGER trg_comments_updated
 BEFORE UPDATE ON comments
