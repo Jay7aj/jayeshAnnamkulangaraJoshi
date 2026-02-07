@@ -83,7 +83,7 @@ CREATE INDEX idx_issues_created_at ON issues(created_at DESC);
 CREATE INDEX idx_issues_updated_at ON issues(updated_at DESC);
 
 CREATE INDEX idx_comments_issue_id ON comments(issue_id);
-CREATE INDEX idx_comments_author_id ON comments(author_id);
+CREATE INDEX idx_comments_user_id ON comments(user_id);
 CREATE INDEX idx_comments_created_at ON comments(created_at DESC);
 
 -- Text search (ILIKE)

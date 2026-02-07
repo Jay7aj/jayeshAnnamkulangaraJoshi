@@ -9,16 +9,17 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use((req, res, next)=>{
-  const start = Date.now();
-
-  res.on('finish', ()=>{
-    const ms = Date.now() - start;
-    console.log(`${req.method} ${req.originalUrl} ${res.statusCode} - ${ms}ms`);
+if (process.env.NODE_ENV !== 'test') {
+  app.use((req, res, next) => {
+    const start = Date.now();
+    res.on('finish', () => {
+      console.log(
+        `${req.method} ${req.originalUrl} ${res.statusCode} - ${Date.now() - start}ms`
+      );
+    });
+    next();
   });
-
-  next();
-})
+}
 
 app.use('/api', routes);
 

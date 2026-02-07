@@ -24,3 +24,8 @@ pool.on('error', (err) => {
 export async function closeDB() {
     await pool.end();
 }
+
+export async function getTestClient(){
+    const client = await pool.connect();
+    return client;
+}
