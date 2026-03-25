@@ -1,25 +1,29 @@
+// backend/src/modules/comments/comments.routes.js
 import { Router } from 'express';
+import { createCommentsController } from './comments.controller.js';
 import { authenticateJWT } from '../../middleware/auth.middleware.js';
-import * as controller from './comments.controller.js';
 
-const router = Router();
+export function createCommentRoutes({ db }) {
+  const router = Router();
+  const controller = createCommentsController({ db });
 
-router.post(
+  router.post(
     '/issues/:issueId/comments',
     authenticateJWT,
     controller.create
-);
+  );
 
-router.get(
+  router.get(
     '/issues/:issueId/comments',
     authenticateJWT,
     controller.list
-);
+  );
 
-router.delete(
-    '/comments/:commentId',
+  router.delete(
+    '/comments/:id',
     authenticateJWT,
     controller.remove
-);
+  );
 
-export default router;
+  return router;
+}

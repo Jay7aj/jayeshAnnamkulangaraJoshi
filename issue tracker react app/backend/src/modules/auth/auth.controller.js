@@ -1,35 +1,39 @@
-import {authService} from './auth.services.js';
+// backend/src/modules/auth/auth.controller.js
+import { authService } from './auth.services.js';
 
-const service = authService();
+export function createAuthController({ db }) {
+  const service = authService(db);
 
-export async function register(req, res, next){
-    try{
-        const {name, email, password} = req.body;
+  return {
+    async register(req, res, next) {
+      try {
+        const { name, email, password } = req.body;
 
-        const data = await service.registerUser({
-            name,
-            email,
-            password
+        const result = await service.registerUser({
+          name,
+          email,
+          password
         });
 
-        res.status(201).json(data);
-    }catch (err){
+        res.status(201).json(result);
+      } catch (err) {
         next(err);
-    }
-}
+      }
+    },
 
-export async function login(req, res, next){
-    try{
-        const {email, password} = req.body;
+    async login(req, res, next) {
+      try {
+        const { email, password } = req.body;
 
-        const data = await service.loginUser({
-            email,
-            password
+        const result = await service.loginUser({
+          email,
+          password
         });
 
-    res.json(data);
-
-    }catch(err){
+        res.json(result);
+      } catch (err) {
         next(err);
+      }
     }
+  };
 }

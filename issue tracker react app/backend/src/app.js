@@ -1,32 +1,42 @@
+// backend/src/app.js
+
 import express from 'express';
 import cors from 'cors';
-import routes from './routes.js';
+import createRoutes from './routes.js';
 import { errorHandler } from './middleware/error.middleware.js';
 
+export function createApp({ db } = {}) {
+  const app = express();
 
-const app = express();
+  app.use(cors());
+  app.use(express.json());
 
-app.use(cors());
-app.use(express.json());
-
-if (process.env.NODE_ENV !== 'test') {
-  app.use((req, res, next) => {
-    const start = Date.now();
-    res.on('finish', () => {
-      console.log(
-        `${req.method} ${req.originalUrl} ${res.statusCode} - ${Date.now() - start}ms`
-      );
+  // Request logging (disabled in test)
+  if (process.env.NODE_ENV !== 'test') {
+    app.use((req, res, next) => {
+      const start = Date.now();
+      res.on('finish', () => {
+        console.log(
+          `${req.method} ${req.originalUrl} ${res.statusCode} - ${Date.now() - start}ms`
+        );
+      });
+      next();
     });
-    next();
+  }
+
+  // Mount API only if DB is provided
+  if (db) {
+    app.use('/api', createRoutes({ db }));
+  }
+
+  // Health should NOT depend on DB
+  app.get('/health', (req, res) => {
+    res.json({ status: 'ok' });
   });
+
+  app.use(errorHandler);
+
+  return app;
 }
 
-app.use('/api', routes);
-
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok' });
-});
-
-app.use(errorHandler);
-
-export default app;
+export default createApp;

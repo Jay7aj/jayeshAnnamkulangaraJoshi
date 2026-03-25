@@ -1,3 +1,5 @@
+// backend/src/middleware/auth.middleware.js
+
 import jwt from 'jsonwebtoken';
 import { env } from '../config/env.js';
 
@@ -12,7 +14,11 @@ export function authenticateJWT(req, res, next) {
 
     try {
         const payload = jwt.verify(token, env.jwtSecret);
-        req.user = payload; // { id, role }
+        req.user = {
+            id: payload.sub,
+            role: payload.role,
+            email: payload.email
+        }; // { id, role }
         next();
     } catch (err) {
         return res.status(401).json({ message: 'Invalid or expired token' });

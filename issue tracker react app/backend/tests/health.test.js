@@ -1,5 +1,7 @@
 import request from 'supertest';
-import app from '../src/app.js';
+import {createApp} from '../src/app.js';
+
+const app = createApp();
 
 describe('Health check', () => {
     test('GET /health returns ok', async () => {

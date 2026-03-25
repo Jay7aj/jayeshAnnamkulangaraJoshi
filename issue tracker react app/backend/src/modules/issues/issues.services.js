@@ -1,14 +1,16 @@
+// // backend/src/modules/issues/issues.services.js
+
 import { pool } from '../../config/db.js';
 import { ISSUE_STATUS_TRANSITIONS } from './issues.workflow.js';
-import { BadRequestError } from '../../utils/apiError.js';
+import { BadRequestError, ForbiddenError, NotFoundError } from '../../utils/apiError.js';
 
 /**
  * Issues service factory
  * @param {Pool | PoolClient} db
  */
-export function issuesService(db = pool) {
+export function issuesService(db = global.__ISSUES_DB__ || pool) {
     return {
-        async createIssue({ title, description, priority, createdBy, assignedTo }) {
+        async createIssue({ title, description, priority, createdBy, assignedTo}) {
             const query = `
                 INSERT INTO issues (title, description, priority, created_by, assigned_to)
                 VALUES ($1, $2, $3, $4, $5)
@@ -87,8 +89,9 @@ export function issuesService(db = pool) {
             `;
 
             const dataQuery = `
-                SELECT *
-                FROM issues
+                SELECT i.*, u.name AS assigned_to_name
+                FROM issues i
+                LEFT JOIN users u ON u.id = i.assigned_to
                 ${whereClause}
                 ORDER BY ${sort} ${order.toUpperCase()}
                 LIMIT $${values.length + 1}
@@ -119,16 +122,31 @@ export function issuesService(db = pool) {
         },
 
     async getIssueById(id) {
-        const { rows } = await db.query(
+        const result = await db.query(
             `SELECT * FROM issues WHERE id = $1`,
             [id]
         );
-        return rows[0];
+        if (result.rowCount === 0) {
+            throw new NotFoundError('Issue not found');
+        }
+        return result.rows[0];
         },
 
-    async updateIssue(id, updates) {
+    async updateIssue(id, updates, currentUser) {
         const current = await this.getIssueById(id);
         if (!current) return null;
+
+        const isOwner = current.created_by === currentUser.id;
+        const isAssigned = current.assigned_to === currentUser.id;
+        const isAdmin = currentUser.role === 'ADMIN';
+
+        if (!isOwner && !isAssigned && !isAdmin) {
+            throw new ForbiddenError('You are not allowed to update this issue');
+        }
+
+        if (updates.assigned_to && !isAdmin) {
+            throw new ForbiddenError('Only admins can assign issues');
+        }
 
         if (updates.status) {
             const allowed = ISSUE_STATUS_TRANSITIONS[current.status];
@@ -173,7 +191,12 @@ export function issuesService(db = pool) {
         return rows[0];
     },
 
-    async deleteIssue(id) {
+    async deleteIssue(id, currentUser) {
+        const issue = await this.getIssueById(id);
+
+        if (issue.created_by !== currentUser.id && currentUser.role !== 'ADMIN') {
+            throw new ForbiddenError('You are not allowed to delete this issue');
+        }
         const { rows } = await db.query(
             `DELETE FROM issues WHERE id = $1 RETURNING *`,
             [id]

@@ -1,3 +1,5 @@
+// backend/src/utils/apiError.js
+
 export class ApiError extends Error{
     constructor(statusCode, message, details = null){
         super(message);

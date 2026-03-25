@@ -1,81 +1,82 @@
-import {createIssueSchema, updateIssueSchema} from './issues.validation.js';
-import { listIssuesQuerySchema } from './issues.query.schema.js';
-import { issueIdParamSchema } from './issues.param.schema.js';
+// backend/src/modules/issues/issues.controller.js
+
+import { issuesService } from './issues.services.js';
+import {
+  createIssueSchema,
+  updateIssueSchema
+} from './issues.validation.js';
 import { NotFoundError, ForbiddenError } from '../../utils/apiError.js';
 import { canUpdateIssue, canDeleteIssue } from '../../policies/issue.policy.js';
-import { issuesService } from './issues.services.js';
 
-const service = issuesService();
+export function createIssuesController({ db }) {
+  const service = issuesService(db);
 
-export async function create(req, res, next){
-    try{
+  return {
+    async create(req, res, next) {
+
+      try {
+
         const data = createIssueSchema.parse(req.body);
         const issue = await service.createIssue({
-            ...data,
-            createdBy: req.user.id
+          ...data,
+          createdBy: req.user.id
         });
-
-        res.status(201).json({data: issue});
-    }catch(err){
+        res.status(201).json({ data: issue });
+      } catch (err) {
         next(err);
-    }
-}
+      }
+    },
 
-export async function list(req, res, next){
-    try{
-        const query = listIssuesQuerySchema.parse(req.query);
-        const issues = await service.getAllIssues(query);
+    async list(req, res, next) {
+      try {
+        const issues = await service.getAllIssues(req.query);
         res.json(issues);
-    }catch(err){
+      } catch (err) {
         next(err);
-    }
-}
+      }
+    },
 
-export async function get(req, res, next){
-    try{
-        const {id}= issueIdParamSchema.parse(req.params);
-        const issue = await service.getIssueById(id);
-        if(!issue) throw new NotFoundError('Issue not found');
-        res.json({data: issue});
-    }catch(err){
+    async get(req, res, next) {
+      try {
+        const issue = await service.getIssueById(req.params.id);
+        if (!issue) throw new NotFoundError('Issue not found');
+        res.json({ data: issue });
+      } catch (err) {
         next(err);
-    }
-}
+      }
+    },
 
-export async function update(req, res, next){
-    try{
-        const {id}= issueIdParamSchema.parse(req.params);
+    async update(req, res, next) {
+      try {
+        const issue = await service.getIssueById(req.params.id);
+        if (!issue) throw new NotFoundError();
 
-        const issue = await service.getIssueById(id);
-        if(!issue){
-            throw new NotFoundError('Issue not found');
+        if (!canUpdateIssue(req.user, issue)) {
+          throw new ForbiddenError();
         }
 
-        if(!canUpdateIssue(req.user, issue)){
-            throw new ForbiddenError();
-        }
         const updates = updateIssueSchema.parse(req.body);
-        const updated = await service.updateIssue(id, updates);
-        res.json({data: updated});
-
-    }catch(err){
+        const updated = await service.updateIssue(req.params.id, updates, req.user);
+        res.json({ data: updated });
+      } catch (err) {
         next(err);
-    }
-}
+      }
+    },
 
-export async function remove(req, res, next){
-    try{
-        const {id}= issueIdParamSchema.parse(req.params);
-        const issue = await service.getIssueById(id);
-        if(!issue) throw new NotFoundError('Issue not Found');
-        if(!canDeleteIssue(req.user, issue)){
-            throw new ForbiddenError();
+    async remove(req, res, next) {
+      try {
+        const issue = await service.getIssueById(req.params.id);
+        if (!issue) throw new NotFoundError();
+
+        if (!canDeleteIssue(req.user, issue)) {
+          throw new ForbiddenError();
         }
-        await service.deleteIssue(id);
+
+        await service.deleteIssue(req.params.id, req.user);
         res.status(204).send();
-    }catch(err){
+      } catch (err) {
         next(err);
+      }
     }
+  };
 }
-
-

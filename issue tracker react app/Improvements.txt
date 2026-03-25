@@ -1,0 +1,8 @@
+role is trusted from token
+revalidation of user from db needed on each request
+token revocation strategy to improve if user is downgraded
+
+improve queries from using *
+
+consider refresh token for full auth maturity
+

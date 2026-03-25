@@ -1,3 +1,5 @@
+// backend/src/policies/issue.policy.js
+
 export function canViewIssue(user, issue) {
     // For now, everyone who is authenticated can view
     return true;

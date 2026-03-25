@@ -1,3 +1,5 @@
+// backend/src/middleware/error.middleware.js
+
 import { ZodError } from 'zod';
 
 export function errorHandler(err, req, res, next) {

@@ -1,3 +1,5 @@
+// backend/src/config/db.js
+
 import pkg from 'pg';
 import { env } from './env.js';
 

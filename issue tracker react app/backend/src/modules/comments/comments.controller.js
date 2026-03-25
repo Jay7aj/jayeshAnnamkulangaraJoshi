@@ -1,44 +1,46 @@
-import {commentsService} from './comments.service.js';
+// backend/src/modules/comments/comments.controller.js
 
-const service = commentsService();
-export async function create(req, res, next) {
-    try {
+import { commentsService } from './comments.service.js';
+import { NotFoundError, ForbiddenError } from '../../utils/apiError.js';
+
+export function createCommentsController({ db }) {
+  const service = commentsService(db);
+
+  return {
+    async create(req, res, next) {
+      try {
         const { issueId } = req.params;
         const { content } = req.body;
 
         const comment = await service.createComment({
-            issueId,
-            authorId: req.user.id,
-            content
+          issueId,
+          userId: req.user.id,
+          content
         });
 
-        res.status(201).json(comment);
-    } catch (err) {
+        res.status(201).json({ data: comment });
+      } catch (err) {
         next(err);
-    }
-}
+      }
+    },
 
-export async function list(req, res, next) {
-    try {
+    async list(req, res, next) {
+      try {
         const { issueId } = req.params;
-        const {page, limit} = req.query;
-        const comments = await service.getCommentsByIssue(issueId, {
-            page: Number(page) || 1,
-            limit: Number(limit) || 20
-        });
-
-        res.json(comments);
-    } catch (err) {
+        const result = await service.getCommentsByIssue(issueId, req.query);
+        res.json(result);
+      } catch (err) {
         next(err);
-    }
-}
+      }
+    },
 
-export async function remove(req, res, next) {
-    try {
-        const { commentId } = req.params;
-        await service.deleteComment(commentId, req.user);
+    async remove(req, res, next) {
+      try {
+        await service.deleteComment(req.params.id, req.user);
         res.status(204).send();
-    } catch (err) {
+      } catch (err) {
         next(err);
+      }
     }
+  };
 }

@@ -1,3 +1,4 @@
+// // backend/src/modules/issues/issues.workflow.js
 export const ISSUE_STATUS_TRANSITIONS = {
     OPEN: ['IN_PROGRESS'],
     IN_PROGRESS: ['DONE', 'OPEN',],

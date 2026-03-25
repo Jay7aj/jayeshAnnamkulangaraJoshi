@@ -1,13 +1,19 @@
+// // backend/src/modules/issues/issues.routes.js
 import { Router } from 'express';
-import * as issuesController from './issues.controller.js';
 import { authenticateJWT } from '../../middleware/auth.middleware.js';
+import { createIssuesController } from './issues.controller.js';
 
-const router = Router();
+export function createIssueRoutes({ db }) {
+  const router = Router();
+  const controller = createIssuesController({ db });
 
-router.post('/', authenticateJWT, issuesController.create);
-router.get('/', authenticateJWT, issuesController.list);
-router.get('/:id', authenticateJWT, issuesController.get);
-router.patch('/:id', authenticateJWT, issuesController.update);
-router.delete('/:id', authenticateJWT, issuesController.remove);
+  router.use(authenticateJWT);
 
-export default router;
+  router.post('/', controller.create);
+  router.get('/', controller.list);
+  router.get('/:id', controller.get);
+  router.patch('/:id', controller.update);
+  router.delete('/:id', controller.remove);
+
+  return router;
+}

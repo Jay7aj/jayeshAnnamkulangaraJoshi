@@ -1,12 +1,18 @@
-import { Router} from 'express';
-import authRoutes from './modules/auth/auth.routes.js';
-import issueRoutes from './modules/issues/issues.routes.js';
-import commentsRoutes from './modules/comments/comments.routes.js';
+// backend/src/routes.js
 
-const router = Router();
+import { Router } from 'express';
+import {createAuthRoutes} from './modules/auth/auth.routes.js';
+import {createIssueRoutes} from './modules/issues/issues.routes.js';
+import {createCommentRoutes} from './modules/comments/comments.routes.js';
+import { createUserRoutes } from './modules/users/users.routes.js';
 
-router.use('/auth', authRoutes);
-router.use('/issues', issueRoutes);
-router.use(commentsRoutes);
+export default function createRoutes({ db }) {
+  const router = Router();
 
-export default router;
+  router.use('/auth', createAuthRoutes({ db }));
+  router.use('/issues', createIssueRoutes({ db }));
+  router.use('/comments', createCommentRoutes({ db }));
+  router.use('/users', createUserRoutes({ db }));
+
+  return router;
+}

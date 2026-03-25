@@ -1,9 +1,13 @@
-import {Router} from 'express';
-import * as authController from './auth.controller.js';
+// backend/src/modules/auth/auth.routes.js
+import { Router } from 'express';
+import { createAuthController } from './auth.controller.js';
 
-const router = Router();
+export function createAuthRoutes({ db }) {
+  const router = Router();
+  const controller = createAuthController({ db });
 
-router.post('/register', authController.register);
-router.post('/login', authController.login);
+  router.post('/register', controller.register);
+  router.post('/login', controller.login);
 
-export default router;
+  return router;
+}

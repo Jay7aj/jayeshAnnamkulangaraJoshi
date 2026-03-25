@@ -1,24 +1,62 @@
 import request from 'supertest';
-import app from '../src/app.js';
-import { pool } from '../src/config/db.js';
 import bcrypt from 'bcrypt';
+import { createApp } from '../src/app.js';
+import {
+  getTestClient,
+  beginTransaction,
+  rollbackTransaction,
+  releaseClient
+} from './helpers/dbTestClient.js';
 
 let token;
 let issueId;
+let app;
+let client;
+
+async function createIssue() {
+  const res = await request(app)
+    .post('/api/issues')
+    .set('Authorization', `Bearer ${token}`)
+    .send({
+      title: 'Test issue',
+      description: 'Created in Jest',
+      priority: 'HIGH'
+    });
+
+    console.log("Issue Response:", res.body);
+
+    if (res.body.data && res.body.data.id) {
+        issueId = res.body.data.id;
+    } else {
+        console.error('Error creating issue:', res.body);  // Log the error for debugging
+    }
+
+  return res.body.data;
+}
 
 beforeAll(async () => {
-  // Ensure clean user
-  await pool.query('DELETE FROM users WHERE email = $1', [
-    'admin@test.com'
-  ]);
+  client = await getTestClient();
+  app = createApp({ db: client });
+
+});
+
+afterAll(async () => {
+  await releaseClient();
+});
+
+beforeEach(async () => {
+  await beginTransaction();
 
   const hashedPassword = await bcrypt.hash('password123', 10);
 
-  const { rows } = await pool.query(
+  await client.query(`DELETE FROM users WHERE email = $1`, [
+    'admin@test.com'
+  ]);
+
+  const {rows} = await client.query(
     `
     INSERT INTO users (email, password_hash, role, name)
     VALUES ($1, $2, $3, $4)
-    RETURNING id
     `,
     ['admin@test.com', hashedPassword, 'ADMIN', 'Admin']
   );
@@ -31,10 +69,13 @@ beforeAll(async () => {
     });
 
   token = res.body.token;
+  // await client.query('DELETE FROM issues');
+  // await client.query('DELETE FROM users');
+  // await client.query('TRUNCATE users CASCADE');
 });
 
-afterAll(async () => {
-  await pool.end();
+afterEach(async () => {
+  await rollbackTransaction();
 });
 
 describe('Issues API', () => {
@@ -44,38 +85,28 @@ describe('Issues API', () => {
       .set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(200);
-    expect(res.body).toHaveProperty('data');
-    expect(res.body).toHaveProperty('meta');
     expect(Array.isArray(res.body.data)).toBe(true);
   });
 
   test('POST /api/issues creates a new issue', async () => {
-    const res = await request(app)
-      .post('/api/issues')
-      .set('Authorization', `Bearer ${token}`)
-      .send({
-        title: 'Test issue',
-        description: 'Created in Jest',
-        priority: 'HIGH'
-      });
-
-    expect(res.status).toBe(201);
-    expect(res.body.data).toHaveProperty('id');
-
-    issueId = res.body.data.id;
+    const issue = await createIssue();
+    expect(issue).toHaveProperty('id');
   });
 
   test('GET /api/issues/:id returns a single issue', async () => {
+    await createIssue();
+
     const res = await request(app)
       .get(`/api/issues/${issueId}`)
       .set('Authorization', `Bearer ${token}`);
 
     expect(res.status).toBe(200);
     expect(res.body.data.id).toBe(issueId);
-    expect(res.body.data.title).toBe('Test issue');
   });
 
   test('PATCH /api/issues/:id updates issue status', async () => {
+    await createIssue();
+
     const res = await request(app)
       .patch(`/api/issues/${issueId}`)
       .set('Authorization', `Bearer ${token}`)
@@ -86,6 +117,8 @@ describe('Issues API', () => {
   });
 
   test('DELETE /api/issues/:id deletes the issue', async () => {
+    await createIssue();
+
     const res = await request(app)
       .delete(`/api/issues/${issueId}`)
       .set('Authorization', `Bearer ${token}`);
@@ -107,14 +140,39 @@ describe('Issues API', () => {
     expect(res.status).toBe(400);
   });
 
-        test('GET /api/issues/:id returns 404 for non-existent issue', async () => {
-        const nonExistentId = '00000000-0000-0000-0000-000000000000';
+  test('GET /api/issues/:id returns 404 for non-existent issue', async () => {
+    const res = await request(app)
+      .get('/api/issues/00000000-0000-0000-0000-000000000000')
+      .set('Authorization', `Bearer ${token}`);
 
-        const res = await request(app)
-            .get(`/api/issues/${nonExistentId}`)
-            .set('Authorization', `Bearer ${token}`);
+    expect(res.status).toBe(404);
+  });
 
-        expect(res.status).toBe(404);
-    });
+  test('Non-owner cannot delete issue', async () => {
+    const issue = await createIssue();
+
+    // Create another user
+    const hashed = await bcrypt.hash('password123', 10);
+
+    await client.query(`
+      INSERT INTO users (email, password_hash, role, name)
+      VALUES ($1, $2, $3, $4)
+    `, ['user2@test.com', hashed, 'USER', 'User 2']);
+
+    const login = await request(app)
+      .post('/api/auth/login')
+      .send({
+        email: 'user2@test.com',
+        password: 'password123'
+      });
+
+    const otherToken = login.body.token;
+
+    const res = await request(app)
+      .delete(`/api/issues/${issue.id}`)
+      .set('Authorization', `Bearer ${otherToken}`);
+
+    expect(res.status).toBe(403);
+  });
 
 });

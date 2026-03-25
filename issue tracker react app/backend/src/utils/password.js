@@ -1,3 +1,5 @@
+// backend/src/utils/password.js
+
 import bcrypt from 'bcrypt';
 
 const SALT_ROUNDS = 12;
